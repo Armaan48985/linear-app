@@ -8,6 +8,7 @@ import {
   addInReview,
   addInTodo,
 } from '@/app/GlobalRedux/Slice';
+import { addDataToFireStore } from '@/app/db';
 
 export const useIssueUtils = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export const useIssueUtils = () => {
       name: issueTitle,
       time: date
     };
-    console.log("add issue to backlog", newIssue)
+    addDataToFireStore(issueTitle,'backlog', 'naruto', date)
     dispatch(addInBacklog(newIssue));
   };
 

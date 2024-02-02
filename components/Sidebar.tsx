@@ -47,7 +47,7 @@ const Sidebar = () => {
   const [teamsBarOpen, setTeamsBarOpen] = useState(true);
   const [teamDetailOpen, setTeamDetailOpen] = useState(true);
   const [tryDetailsOpen, setTryDetailsOpen] = useState(true);
-  const  { addIssuetoBacklog }:any = useIssueUtils;
+  const { addIssuetoBacklog }: any = useIssueUtils;
 
   return (
     <div className="flex-none p-4 border-r border-slate-800 min-h-screen text-primary pl-6">
@@ -103,12 +103,12 @@ const Sidebar = () => {
                 <DropdownMenuShortcut>O then M</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuItem
-                  className="hover:bg-blue-400"
-                  style={{ backgroundColor: 'var(--tw-bg-blue-400-hover)' }}
-                >
-                  Settings
-                  <DropdownMenuShortcut>G then S</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                className="hover:bg-blue-400"
+                style={{ backgroundColor: "var(--tw-bg-blue-400-hover)" }}
+              >
+                Settings
+                <DropdownMenuShortcut>G then S</DropdownMenuShortcut>
+              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="bg-gray-700 my-2" />
             <DropdownMenuGroup>
@@ -133,44 +133,59 @@ const Sidebar = () => {
         </DropdownMenu>
       </div>
 
-      <div className="flex-center w-full gap-2 mr-10 px-5">
-            <CreateIssue trigger={
-                <div className="w-[305px] bg-grey h-9 rounded-[.3rem] text-left flex items-center justify-start text-sm hover:bg-[#262840] px-3 group">
-                  <span className="pr-3 text-[1.1rem] group-hover:text-white">
-                    <FiEdit />
-                  </span>{" "}
-                  New Issue
-                </div>
-                } 
-                createIssue={addIssuetoBacklog}
-            />
-            <Button
-              type="submit"
-              className="px-2 bg-grey h-9 rounded-[.3rem] hover:text-white hover:bg-grey text-lg font-bold"
-            >
-              <IoSearchSharp />
-            </Button>
+      <div className="flex max-w-sm items-center justify-center space-x-2 mt-2 mb-5">
+        <CreateIssue
+          trigger={
+            <div className="w-[305px] pl-3 bg-grey h-9 rounded-[.3rem] text-left flex mr-0 items-center justify-start text-sm hover:bg-[#262840] group">
+              <span className="text-[1.1rem] group-hover:text-white pr-2">
+                <FiEdit />
+              </span>{" "}
+              New Issue
+            </div>
+          }
+          createIssue={addIssuetoBacklog}
+        />
+        <Button
+          type="submit"
+          className="px-2 mr-10 bg-grey h-9 rounded-[.3rem] hover:text-white hover:bg-grey text-lg font-bold"
+        >
+          <Link href="/search">
+            <IoSearchSharp />
+          </Link>
+        </Button>
       </div>
 
-      <Link href="/inbox" className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3">
+      <Link
+        href="/inbox"
+        className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3"
+      >
         <span className="text-md mr-3 group-hover:text-white font-extrabold brightness-75 group-hover:brightness-200">
           <GoInbox />
         </span>
         <p>Inbox</p>
       </Link>
-      <Link href="/my-issues" className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3">
+      <Link
+        href="/my-issues"
+        className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3"
+      >
         <span className="text-md mr-3 group-hover:text-white font-extrabold brightness-75 group-hover:brightness-200">
           <SiGooglelens />
         </span>
         <p>My issues</p>
       </Link>
-      <Link href="/views" className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3">
+      <Link
+        href="/views"
+        className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group pl-3"
+      >
         <span className="text-md mr-3 group-hover:text-white font-extrabold brightness-75 group-hover:brightness-200">
           <GrView />
         </span>
         <p>Views</p>
       </Link>
-      <Link href="/roadmap" className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group mb-4 pl-3">
+      <Link
+        href="/roadmap"
+        className="flex justify-start items-center py-[.36rem] bgHover-grey w-full p-2 rounded-[.55rem] group mb-4 pl-3"
+      >
         <span className="text-md mr-3 group-hover:text-white font-extrabold brightness-75 group-hover:brightness-200">
           <FaMap />
         </span>
@@ -216,28 +231,35 @@ const Sidebar = () => {
                   </p>
                 </Link>
                 <div className="pl-8 list-line my-0 py-0">
-                  <Link href="/team/active"> <p className="mb-2 bgHover-grey ml-4 pl-4 rounded-[.55rem]">
-                    Active
-                  </p></Link>
-                 <Link href="/team/backlog"> <p className="bgHover-grey  ml-4 pl-4 rounded-[.55rem]">
-                    Backlog
-                  </p></Link>
+                  <Link href="/team/active">
+                    {" "}
+                    <p className="mb-2 bgHover-grey ml-4 pl-4 rounded-[.55rem]">
+                      Active
+                    </p>
+                  </Link>
+                  <Link href="/team/backlog">
+                    {" "}
+                    <p className="bgHover-grey  ml-4 pl-4 rounded-[.55rem]">
+                      Backlog
+                    </p>
+                  </Link>
                 </div>
-                <Link href="/team/projects"><p className="flex items-center gap-2 bgHover-grey pl-7 py-1 group">
-                  <span className="brightness-75 group-hover:brightness-200">
-                    <HiOutlineViewGrid />
-                  </span>
-                  Projects
-                </p>
-
+                <Link href="/team/projects">
+                  <p className="flex items-center gap-2 bgHover-grey pl-7 py-1 group">
+                    <span className="brightness-75 group-hover:brightness-200">
+                      <HiOutlineViewGrid />
+                    </span>
+                    Projects
+                  </p>
                 </Link>
                 <Link href="/team/views">
-                <p className="flex items-center gap-2 bgHover-grey pl-7 py-1 group">
-                  <span className="brightness-75 group-hover:brightness-200">
-                    <GrView />
-                  </span>
-                  Views
-                </p></Link>
+                  <p className="flex items-center gap-2 bgHover-grey pl-7 py-1 group">
+                    <span className="brightness-75 group-hover:brightness-200">
+                      <GrView />
+                    </span>
+                    Views
+                  </p>
+                </Link>
               </div>
             )}
           </div>

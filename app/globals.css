@@ -2,32 +2,178 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Reusable Colors */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --primary-color: #ffffff; /* Custom primary color */
+  --secondary-color: #ededed; /* Custom secondary color */
+  --accent-color: #b8b8b8; /* Custom accent color */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+p {
+  font-size: 15px;
+}
+
+/* Background Colors */
+
+.bg-body {
+  background-color: #191a23;
+}
+
+.bg-lightgrey {
+  background-color: rgb(61, 64, 86);
+}
+
+.bg-grey {
+  background-color: rgb(39, 41, 57);
+}
+
+.bg-darkgrey{
+  background-color: rgb(30, 32, 43);
+}
+
+.bgHover-grey:hover {
+  background-color: rgb(39, 41, 57);
+}
+
+.bgHover-lightgrey:hover {
+  background-color: rgb(66, 70, 94);
+}
+
+.bgHover-darkgrey:hover {
+  background-color: rgb(31, 33, 46);
+}
+
+.hover-icon{
+  opacity: .6;
+}
+
+.hover-icon:hover{
+  opacity: 1;
+}
+
+
+.dim-element {
+  opacity: 0.8;
+}
+
+/* Text Colors */
+.text-primary {
+  color: rgb(210, 211, 224);
+  font-weight: 500;
+}
+
+.text-secondary {
+  color: var(--secondary-color);
+}
+
+.text-accent {
+  color: var(--accent-color);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  color: #fff;
+}
+
+.btn-accent {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+/* Card Styles */
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+}
+
+/* Custom Colors */
+.bg-dark-gray {
+  background-color: #2c3e50;
+}
+
+.text-light-gray {
+  color: #ecf0f1;
+}
+
+.text-dark-gray {
+  color: #34495e;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background-color: #1a1a1a;
+  color: #ecf0f1;
+  font-family: "Arial", sans-serif; 
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.sm-icon {
+  font-size: 1rem;
 }
+
+.md-icon {
+  font-size: 1.5rem;
+}
+
+.lg-icon {
+  font-size: 2rem;
+}
+
+/* custom styles */
+
+.list-line {
+  position: relative;
+}
+
+.list-line::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 35px;
+  width: 2px;
+  height: 67px;
+  background: rgb(74, 74, 74);
+}
+
+.icon-hover {
+  opacity: 0.7;
+}
+
+.icon-hover:hover {
+  opacity: 1;
+}
+
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
+
+
+

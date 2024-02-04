@@ -25,13 +25,20 @@ import { Input } from './ui/input'
 const CreateIssue = ({trigger, createIssue}:any) => {
 
     const [issueTitle, setIssueTitle] = useState('');
+    const [value, setValue] = useState('backlog');
+
+    const handleSelectChange = (selectedValue:string) => {
+      setValue(selectedValue);
+    };
+  
 
     const handleSaveIssue = () => {
       if (issueTitle.trim() !== '') {
-        createIssue(issueTitle);
+        createIssue(issueTitle, value);
         setIssueTitle('');
       }
     };
+
   
     return (
       <Dialog>
@@ -57,17 +64,17 @@ const CreateIssue = ({trigger, createIssue}:any) => {
             </div>
   
             <div className='flex'>
-              <Select>
+              <Select onValueChange={handleSelectChange}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="Backlog" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectItem value="apple">Apple</SelectItem>
-                    <SelectItem value="banana">Banana</SelectItem>
-                    <SelectItem value="blueberry">Blueberry</SelectItem>
-                    <SelectItem value="grapes">Grapes</SelectItem>
-                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                    <SelectItem value="backlog">Backlog</SelectItem>  
+                    <SelectItem value="todo">Todo</SelectItem>
+                    <SelectItem value="progress">In Progress</SelectItem>
+                    <SelectItem value="review">In review</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

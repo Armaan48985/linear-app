@@ -5,7 +5,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import { DndProvider } from "react-dnd";
+import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 // import Sidebar from '@/pages/Sidebar'
 import "@/app/globals.css";
@@ -69,6 +69,8 @@ import {
 import CreateIssue from "@/components/CreateIssue";
 import { useIssueUtils } from "./AddingIssues";
 import { fetchDataFromFireStore } from "@/app/db";
+import { DropArea } from "@/components/DropArea";
+import {DragDropContext} from '@hello-pangea/dnd'
 
 const page = () => {
   const dispatch = useDispatch();
@@ -89,26 +91,20 @@ const page = () => {
 
     switch (issueType) {
       case "backlog":
-        console.log(data)
         data.map((e, i) => dispatch(addInBacklog(e)));
         break;
 
       case "todo":
-        console.log(data);
         data.map((e, i) => dispatch(addInTodo(e)));
-        // dispatch(addInTodo(data[2]));
         break;
       case "review":
-        console.log(data);
-        // dispatch(addInReview(data[2]));
+        data.map((e, i) => dispatch(addInReview(e)));
         break;
       case "done":
-        console.log(data);
-        // dispatch(addInDone(data[2]));
+        data.map((e, i) => dispatch(addInDone(e)));
         break;
       case "progress":
-        console.log(data);
-        // dispatch(addInProgress(data[2]));
+        data.map((e, i) => dispatch(addInProgress(e)));
         break;
       default:
         break;
@@ -121,10 +117,7 @@ const page = () => {
     fetchDataAndInitializeState("review");
     fetchDataAndInitializeState("done");
     fetchDataAndInitializeState("progress");
-    console.log("worked");
   }, []);
-
-
 
   const {
     addIssuetoBacklog,
@@ -134,6 +127,8 @@ const page = () => {
     addIssuetoTodo,
   } = useIssueUtils();
 
+  const handleDragEnd = () => {}
+  const handleDragStart = () => {}
   return (
     <ResizablePanelGroup
       direction="horizontal"
@@ -317,7 +312,7 @@ const page = () => {
           <DndProvider backend={HTML5Backend}>
             {reviewIssues.length > 0 && (
               <div>
-                <header className="bg-darkgrey w-full h-12 flex-between px-6">
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
                   <p>In Review</p>
                   <CreateIssue
                     trigger={<GoPlus />}
@@ -325,16 +320,29 @@ const page = () => {
                   />
                 </header>
 
-                <main>
-                  {reviewIssues.map((e, i) => (
-                    <p key={i}>{e.name}</p>
-                  ))}
+                <main className="w-full flex flex-col items-center">
+                  {reviewIssues
+                    .slice(0, reviewIssues.length / 2)
+                    .map((e, i) => (
+                      <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-20">
+                        <p key={i}>{e.name}</p>
+                        <div className="flex-center gap-2">
+                          {/* <p>{e.time.toDate().getDate()}</p>
+                          <p>
+                            {e.time
+                              .toDate()
+                              .toLocaleString("en-US", { month: "long" })
+                              .slice(0, 3)}
+                          </p> */}
+                        </div>
+                      </div>
+                    ))}
                 </main>
               </div>
             )}
             {progressIssues.length > 0 && (
               <div>
-                <header className="bg-darkgrey w-full h-12 flex-between px-6">
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
                   <p>In Progress</p>
                   <CreateIssue
                     trigger={<GoPlus />}
@@ -342,16 +350,29 @@ const page = () => {
                   />
                 </header>
 
-                <main>
-                  {progressIssues.map((e, i) => (
-                    <p key={i}>{e.name}</p>
-                  ))}
+                <main className="w-full flex flex-col items-center">
+                  {progressIssues
+                    .slice(0, progressIssues.length / 2)
+                    .map((e, i) => (
+                      <div className="border-b-2 bgHover-darkgrey duration-75 border-slate-800 h-11 flex-between w-full px-6">
+                        <p key={i}>{e.name}</p>
+                        <div className="flex-center gap-2">
+                          {/* <p>{e.time.toDate().getDate()}</p>
+                          <p>
+                            {e.time
+                              .toDate()
+                              .toLocaleString("en-US", { month: "long" })
+                              .slice(0, 3)}
+                          </p> */}
+                        </div>
+                      </div>
+                    ))}
                 </main>
               </div>
             )}
             {todoIssues.length > 0 && (
               <div>
-                <header className="bg-darkgrey w-full h-12 flex-between px-6">
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
                   <p>Todo</p>
                   <CreateIssue
                     trigger={<GoPlus />}
@@ -359,9 +380,20 @@ const page = () => {
                   />
                 </header>
 
-                <main>
-                  {todoIssues.map((e, i) => (
-                    <p key={i}>{e.name}</p>
+                <main className="w-full flex flex-col items-center">
+                  {todoIssues.slice(0, todoIssues.length / 2).map((e, i) => (
+                    <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6">
+                      <p key={i}>{e.name}</p>
+                      <div className="flex-center gap-2">
+                        {/* <p>{e.time.toDate().getDate()}</p>
+                        <p>
+                          {e.time
+                            .toDate()
+                            .toLocaleString("en-US", { month: "long" })
+                            .slice(0, 3)}
+                        </p> */}
+                      </div>
+                    </div>
                   ))}
                 </main>
               </div>
@@ -372,44 +404,59 @@ const page = () => {
                   <p>Backlog</p>
                   <CreateIssue
                     trigger={<GoPlus />}
-                    createIssue={addIssuetoBacklog}
+                    createIssue={addIssuetoTodo}
                   />
                 </header>
 
                 <main className="w-full flex flex-col items-center">
-                  {backlogIssues.slice(0,backlogIssues.length/2).map((e, i) => (
-                    <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-12 flex-between w-full px-6">
-                      <p key={i}>{e.name}</p>
-                      <div className="flex-center gap-2">
-                        <p>{e.time.toDate().getDate()}</p>
+                  {backlogIssues
+                    .slice(0, backlogIssues.length / 2)
+                    .map((e, i) => (
+                      <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6">
+                        <p key={i}>{e.name}</p>
+                        <div className="flex-center gap-2">
+                          {/* <p>{e.time.toDate().getDate()}</p>
                         <p>
                           {e.time
                             .toDate()
                             .toLocaleString("en-US", { month: "long" })
                             .slice(0, 3)}
-                        </p>
+                        </p> */}
+                        </div>
+                      </div>
+                    ))}
+                </main>
+              </div>
+            )}
+            {doneIssues.length > 0 && (
+              <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+                <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>Done</p>
+                  <CreateIssue
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoTodo}
+                  />
+                </header>
+
+                <main className="w-full flex flex-col items-center">
+                  {doneIssues.slice(0, doneIssues.length / 2).map((e, i) => (
+                    <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6">
+                      <p key={i}>{e.name}</p>
+                      <div className="flex-center gap-2">
+                        {/* <p>{e.time.toDate().getDate()}</p>
+                        <p>
+                          {e.time
+                            .toDate()
+                            .toLocaleString("en-US", { month: "long" })
+                            .slice(0, 3)}
+                        </p> */}
                       </div>
                     </div>
                   ))}
                 </main>
               </div>
-            )}
-            {doneIssues.length > 0 && (
-              <div>
-                <header className="bg-darkgrey w-full h-12 flex-between px-6">
-                  <p>Done</p>
-                  <CreateIssue
-                    trigger={<GoPlus />}
-                    createIssue={addIssuetoDone}
-                  />
-                </header>
-
-                <main>
-                  {doneIssues.map((e, i) => (
-                    <p key={i}>{e.name}</p>
-                  ))}
-                </main>
-              </div>
+              </DragDropContext>
             )}
 
             {reviewIssues.length === 0 &&

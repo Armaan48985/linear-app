@@ -47,7 +47,7 @@ const Sidebar = () => {
   const [teamsBarOpen, setTeamsBarOpen] = useState(true);
   const [teamDetailOpen, setTeamDetailOpen] = useState(true);
   const [tryDetailsOpen, setTryDetailsOpen] = useState(true);
-  const { addIssuetoBacklog }: any = useIssueUtils;
+  const { addIssuetoBacklog } = useIssueUtils();
 
   return (
     <div className="flex-none p-4 border-r border-slate-800 min-h-screen text-primary pl-6">

@@ -56,6 +56,7 @@ const appSlice = createSlice({
     addInDone: (state: AppState, action: PayloadAction<ArrayItem>) => {
       state.doneIssues.push(action.payload);
     },
+    
   },
 });
 

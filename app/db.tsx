@@ -16,9 +16,9 @@ export async function addDataToFireStore(
   try {
     const userCollectionRef = collection(db, "users");
     const userDocumentRef = doc(userCollectionRef, userName || "naruto");
-    const projectsCollectionRef = collection(userDocumentRef, "projects");
-    const projectsDocumentRef = doc(projectsCollectionRef, issueType);
-    const issuesCollectionRef = collection(projectsDocumentRef, "issues");
+    const projectsCollectionRef = collection(userDocumentRef, "project");
+    const projectsDocumentRef = doc(projectsCollectionRef, "issues");
+    const issuesCollectionRef = collection(projectsDocumentRef, issueType);
     const issueDocumentRef = doc(issuesCollectionRef, name);
 
     await setDoc(issueDocumentRef, { name: name, type: issueType, time: date });
@@ -33,12 +33,11 @@ export async function fetchDataFromFireStore(userName: any, issueType: string) {
   try {
     const userCollectionRef = collection(db, "users");
     const userDocumentRef = doc(userCollectionRef, userName || "naruto");
-    const projectsCollectionRef = collection(userDocumentRef, "projects");
-    const projectsDocumentRef = doc(projectsCollectionRef, "dummy-project");
-    const projectsDocRef = collection(projectsDocumentRef, "issues");
-    const issueTypeRef = collection(projectsDocRef, issueType);
+    const projectsCollectionRef = collection(userDocumentRef, "project");
+    const projectsDocumentRef = doc(projectsCollectionRef, "issues");
+    const issuesCollectionRef = collection(projectsDocumentRef, issueType);
 
-    const querySnapshot = await getDocs(issueTypeRef);
+    const querySnapshot = await getDocs(issuesCollectionRef);
 
     const data: any[] = [];
     querySnapshot.forEach((doc) => {

@@ -1,5 +1,6 @@
 ﻿'use client'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { useEffect } from 'react';
 
 export interface ArrayItem {
   id: number;
@@ -28,7 +29,6 @@ const initialState: AppState = {
   doneIssues: [],
   reviewIssues: [],
 };
-
 
 
 const appSlice = createSlice({

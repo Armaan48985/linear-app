@@ -68,8 +68,10 @@ import {
 } from "@/app/GlobalRedux/Slice";
 import CreateIssue from "@/components/CreateIssue";
 import { useIssueUtils } from "./AddingIssues";
+import { fetchDataFromFireStore } from "@/app/db";
 
 const page = () => {
+  const dispatch = useDispatch();
   const backlogIssues = useSelector(
     (state: RootState) => state.app.backlogIssues
   );
@@ -81,6 +83,48 @@ const page = () => {
   const progressIssues = useSelector(
     (state: RootState) => state.app.progressIssues
   );
+
+  const fetchDataAndInitializeState = async (issueType: string) => {
+    const data = await fetchDataFromFireStore("naruto", issueType);
+
+    switch (issueType) {
+      case "backlog":
+        console.log(data)
+        data.map((e, i) => dispatch(addInBacklog(e)));
+        break;
+
+      case "todo":
+        console.log(data);
+        data.map((e, i) => dispatch(addInTodo(e)));
+        // dispatch(addInTodo(data[2]));
+        break;
+      case "review":
+        console.log(data);
+        // dispatch(addInReview(data[2]));
+        break;
+      case "done":
+        console.log(data);
+        // dispatch(addInDone(data[2]));
+        break;
+      case "progress":
+        console.log(data);
+        // dispatch(addInProgress(data[2]));
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    fetchDataAndInitializeState("backlog");
+    fetchDataAndInitializeState("todo");
+    fetchDataAndInitializeState("review");
+    fetchDataAndInitializeState("done");
+    fetchDataAndInitializeState("progress");
+    console.log("worked");
+  }, []);
+
+
 
   const {
     addIssuetoBacklog,
@@ -333,13 +377,14 @@ const page = () => {
                 </header>
 
                 <main className="w-full flex flex-col items-center">
-                  {backlogIssues.map((e, i) => (
+                  {backlogIssues.slice(0,backlogIssues.length/2).map((e, i) => (
                     <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-12 flex-between w-full px-6">
                       <p key={i}>{e.name}</p>
                       <div className="flex-center gap-2">
-                        <p>{e.time.getDate()}</p>
+                        <p>{e.time.toDate().getDate()}</p>
                         <p>
                           {e.time
+                            .toDate()
                             .toLocaleString("en-US", { month: "long" })
                             .slice(0, 3)}
                         </p>

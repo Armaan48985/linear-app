@@ -1,67 +1,73 @@
-﻿'use client'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/app/GlobalRedux/reducers';
+﻿"use client";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/app/GlobalRedux/reducers";
 import {
   addInBacklog,
   addInDone,
   addInProgress,
   addInReview,
   addInTodo,
-} from '@/app/GlobalRedux/Slice';
-import { addDataToFireStore } from '@/app/db';
+} from "@/app/GlobalRedux/Slice";
+import { addDataToFireStore } from "@/app/db";
 
 export const useIssueUtils = () => {
   const dispatch = useDispatch();
-  const reviewIssues = useSelector((state: RootState) => state.app.reviewIssues);
-  const progressIssues = useSelector((state: RootState) => state.app.progressIssues);
-  const backlogIssues = useSelector((state: RootState) => state.app.backlogIssues);
+  const reviewIssues = useSelector(
+    (state: RootState) => state.app.reviewIssues
+  );
+  const progressIssues = useSelector(
+    (state: RootState) => state.app.progressIssues
+  );
+  const backlogIssues = useSelector(
+    (state: RootState) => state.app.backlogIssues
+  );
   const doneIssues = useSelector((state: RootState) => state.app.doneIssues);
   const todoIssues = useSelector((state: RootState) => state.app.todoIssues);
 
   var date = new Date();
 
-  const addIssuetoReview = (issueTitle:string) => {
+  const addIssuetoReview = (issueTitle: string) => {
     const newIssue = {
       id: reviewIssues.length + 1,
       name: issueTitle,
-      time: date
+      time: date,
     };
     dispatch(addInReview(newIssue));
   };
 
-  const addIssuetoProgress = (issueTitle:string) => {
+  const addIssuetoProgress = (issueTitle: string) => {
     const newIssue = {
       id: progressIssues.length + 1,
       name: issueTitle,
-      time: date
+      time: date,
     };
     dispatch(addInProgress(newIssue));
   };
 
-  const addIssuetoBacklog = (issueTitle:string) => {
+  const addIssuetoBacklog = (issueTitle: string) => {
     const newIssue = {
       id: backlogIssues.length + 1,
       name: issueTitle,
-      time: date
+      time: date,
     };
-    addDataToFireStore(issueTitle,'backlog', 'naruto', date)
+    addDataToFireStore(issueTitle, "backlog", "naruto", date);
     dispatch(addInBacklog(newIssue));
   };
 
-  const addIssuetoDone = (issueTitle:string) => {
+  const addIssuetoDone = (issueTitle: string) => {
     const newIssue = {
       id: doneIssues.length + 1,
       name: issueTitle,
-      time: date
+      time: date,
     };
     dispatch(addInDone(newIssue));
   };
 
-  const addIssuetoTodo = (issueTitle:string) => {
+  const addIssuetoTodo = (issueTitle: string) => {
     const newIssue = {
       id: todoIssues.length + 1,
       name: issueTitle,
-      time: date
+      time: date,
     };
     dispatch(addInTodo(newIssue));
   };

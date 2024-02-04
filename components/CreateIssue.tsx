@@ -10,6 +10,15 @@ import {
     DialogTitle,
     DialogTrigger,
   } from "@/components/ui/dialog"
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 
@@ -18,10 +27,8 @@ const CreateIssue = ({trigger, createIssue}:any) => {
     const [issueTitle, setIssueTitle] = useState('');
 
     const handleSaveIssue = () => {
-      // Check if the issue title is not empty before saving
       if (issueTitle.trim() !== '') {
         createIssue(issueTitle);
-        // Reset the issue title after saving
         setIssueTitle('');
       }
     };
@@ -50,7 +57,20 @@ const CreateIssue = ({trigger, createIssue}:any) => {
             </div>
   
             <div className='flex'>
-              <Button variant="default">Todo</Button>
+              <Select>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Backlog" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value="apple">Apple</SelectItem>
+                    <SelectItem value="banana">Banana</SelectItem>
+                    <SelectItem value="blueberry">Blueberry</SelectItem>
+                    <SelectItem value="grapes">Grapes</SelectItem>
+                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
               <Button variant="default">Todo</Button>
               <Button variant="default">Todo</Button>
               <Button variant="default">Todo</Button>

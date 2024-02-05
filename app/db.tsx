@@ -11,7 +11,7 @@ export async function addDataToFireStore(
   name: string,
   issueType: string,
   userName: string,
-  date: Date
+  date: object
 ) {
   try {
     const userCollectionRef = collection(db, "users");
@@ -51,14 +51,14 @@ export async function fetchDataFromFireStore(userName: any, issueType: string) {
   }
 }
 
-export async function DeleteDataFromFireStore(userName: any, name: any) {
+export async function DeleteDataFromFireStore(userName: any, issueType: string, name: any) {
   try {
     const userCollectionRef = collection(db, "users");
     const userDocumentRef = doc(userCollectionRef, userName || "naruto");
-    const projectsCollectionRef = collection(userDocumentRef, "projects");
-    const projectsDocumentRef = doc(projectsCollectionRef, "dummy-project");
-    const projectsDocRef = collection(projectsDocumentRef, "issues");
-    const issueDocumentRef = doc(projectsDocRef, name);
+    const projectsCollectionRef = collection(userDocumentRef, "project");
+    const projectsDocumentRef = doc(projectsCollectionRef, "issues");
+    const issuesCollectionRef = collection(projectsDocumentRef, issueType);
+    const issueDocumentRef = doc(issuesCollectionRef, name);
 
     await deleteDoc(issueDocumentRef);
     return true;

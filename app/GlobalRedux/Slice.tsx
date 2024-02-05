@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 export interface ArrayItem {
   id: number;
   name: string; 
-  time: Date;
+  time: {date: number, month: string};
 }
 
 // Extend the existing AppState interface
@@ -56,9 +56,48 @@ const appSlice = createSlice({
     addInDone: (state: AppState, action: PayloadAction<ArrayItem>) => {
       state.doneIssues.push(action.payload);
     },
+    deleteFromReview: (state: AppState, action: PayloadAction<number>) => {
+      const indexToDelete = action.payload;
+      state.reviewIssues = state.reviewIssues.filter((_, index) => index !== indexToDelete);
+    },
     
+    deleteFromProgress: (state: AppState, action: PayloadAction<number>) => {
+      const indexToDelete = action.payload;
+      state.progressIssues = state.progressIssues.filter((_, index) => index !== indexToDelete);
+    },
+
+    deleteFromTodo: (state: AppState, action: PayloadAction<number>) => {
+      const indexToDelete = action.payload;
+      state.todoIssues = state.todoIssues.filter((_, index) => index !== indexToDelete);
+    },
+
+    deleteFromBacklog: (state: AppState, action: PayloadAction<number>) => {
+      const indexToDelete = action.payload;
+      state.backlogIssues = state.backlogIssues.filter((_, index) => index !== indexToDelete);
+    },
+
+    deleteFromDone: (state: AppState, action: PayloadAction<number>) => {
+      const indexToDelete = action.payload;
+      console.log("confirm deleting", indexToDelete);
+      console.log("Current doneIssues:", state.doneIssues); // Add this line
+      state.doneIssues = state.doneIssues.filter((item, index) => index !== indexToDelete);
+    },
   },
 });
 
-export const { setValue, setIsOpened, addInBacklog, addInDone, addInProgress, addInReview, addInTodo } = appSlice.actions;
+export const {
+  setValue,
+  setIsOpened,
+  addInBacklog,
+  addInDone,
+  addInProgress,
+  addInReview,
+  addInTodo,
+  deleteFromReview,
+  deleteFromProgress,
+  deleteFromTodo,
+  deleteFromBacklog,
+  deleteFromDone,
+} = appSlice.actions;
+
 export default appSlice.reducer;

@@ -22,10 +22,10 @@ import {
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 
-const CreateIssue = ({trigger, createIssue}:any) => {
+const CreateIssue = ({trigger, createIssue, issueType}:any) => {
 
     const [issueTitle, setIssueTitle] = useState('');
-    const [value, setValue] = useState('backlog');
+    const [value, setValue] = useState(issueType);
 
     const handleSelectChange = (selectedValue:string) => {
       setValue(selectedValue);
@@ -66,7 +66,7 @@ const CreateIssue = ({trigger, createIssue}:any) => {
             <div className='flex'>
               <Select onValueChange={handleSelectChange}>
                 <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Backlog" />
+                  <SelectValue placeholder={issueType} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>

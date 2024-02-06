@@ -65,23 +65,22 @@ const appSlice = createSlice({
       const indexToDelete = action.payload;
       state.progressIssues = state.progressIssues.filter((_, index) => index !== indexToDelete);
     },
-
+    
     deleteFromTodo: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
       state.todoIssues = state.todoIssues.filter((_, index) => index !== indexToDelete);
     },
-
+    
     deleteFromBacklog: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
       state.backlogIssues = state.backlogIssues.filter((_, index) => index !== indexToDelete);
     },
-
+    
     deleteFromDone: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      console.log("confirm deleting", indexToDelete);
-      console.log("Current doneIssues:", state.doneIssues); // Add this line
-      state.doneIssues = state.doneIssues.filter((item, index) => index !== indexToDelete);
+      state.doneIssues = state.doneIssues.filter((_, index) => index !== indexToDelete);
     },
+    
   },
 });
 

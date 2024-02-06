@@ -1,5 +1,5 @@
 ﻿"use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -19,35 +19,15 @@ import {
 } from "@/components/ui/tooltip";
 import Sidebar from "@/components/Sidebar";
 import { GoPlus } from "react-icons/go";
-
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/GlobalRedux/reducers";
-import {
-  ArrayItem,
-  addInBacklog,
-  addInDone,
-  addInProgress,
-  addInReview,
-  addInTodo,
-  deleteFromDone,
-} from "@/app/GlobalRedux/Slice";
 import CreateIssue from "@/components/CreateIssue";
 import { useIssueUtils } from "./AddingIssues";
-import {
-  DeleteDataFromFireStore,
-  addDataToFireStore,
-  fetchDataFromFireStore,
-} from "@/app/db";
-import { DropArea } from "@/components/DropArea";
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from "@hello-pangea/dnd";
 import DisplayDropdown from "@/components/dropdowns/DisplayDropdown";
 import NotificationDropdown from "@/components/dropdowns/NotificationDropdown";
 import fetchIssues from "@/components/fetchIssues";
+import { IssueEdit } from "@/components/issueEdit";
+import Loading from "@/app/loading/page";
 
 const page = () => {
   const dispatch = useDispatch();
@@ -66,11 +46,28 @@ const page = () => {
   const { fetchDataAndInitializeState } = fetchIssues();
 
   useEffect(() => {
-    fetchDataAndInitializeState("backlog");
-    fetchDataAndInitializeState("todo");
-    fetchDataAndInitializeState("review");
-    fetchDataAndInitializeState("done");
-    fetchDataAndInitializeState("progress");
+    const storedInitialized = localStorage.getItem("initialized"); // Check local storage
+    if (storedInitialized !== "true") {
+      fetchDataAndInitializeState("backlog");
+      fetchDataAndInitializeState("todo");
+      fetchDataAndInitializeState("review");
+      fetchDataAndInitializeState("done");
+      fetchDataAndInitializeState("progress");
+
+      localStorage.setItem("initialized", "true"); // Save to local storage
+    }
+  }, []); // Empty dependency array ensures the effect runs only once when the component mounts
+
+  useEffect(() => {
+    const clearLocalStorage = () => {
+      localStorage.removeItem("initialized");
+    };
+
+    window.addEventListener("beforeunload", clearLocalStorage);
+
+    return () => {
+      window.removeEventListener("beforeunload", clearLocalStorage);
+    };
   }, []);
 
   const {
@@ -80,32 +77,6 @@ const page = () => {
     addIssuetoReview,
     addIssuetoTodo,
   } = useIssueUtils();
-
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const draggedItem = Number(result.draggableId); // Access the dragged item ID
-    const draggedFrom = result.source.droppableId; // Access the ID of the source list
-    const droppedAt = result.destination?.droppableId;
-
-    if (draggedFrom == "doneContainer" && droppedAt == "backlogContainer") {
-      addInBacklog(doneIssues[draggedItem]);
-      deleteFromDone(draggedItem);
-      // addDataToFireStore(doneIssues[draggedItem].name, "backlog", 'naruto', doneIssues[draggedItem].time)
-    }
-  };
-
-  const handleDragStart = (start: any) => {
-    const draggedItem = Number(start.draggableId); // Access the dragged item ID
-    const sourceListId = start.source.droppableId;
-
-    if (sourceListId == "doneContainer") {
-      // DeleteDataFromFireStore("naruto", "done", doneIssues[draggedItem].name);
-      // setTimeout(() => location.reload(), 1500)
-    }
-  };
 
   return (
     <ResizablePanelGroup
@@ -184,205 +155,191 @@ const page = () => {
             </div>
           </nav>
 
-          {reviewIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 fle key={i}x-between px-6">
-                <p>In Review</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoReview}
-                  issueType="review"
-                />
-              </header>
+          <Suspense fallback={<p>hello i am loading</p>}>
+            {reviewIssues.length > 0 && (
+              <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>Review</p>
+                  <CreateIssue
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoReview}
+                    issueType="review"
+                  />
+                </header>
 
-              <main className="w-full flex flex-col items-center">
-                {reviewIssues.map((e, i) => (
-                  <div
-                    key={i}
-                    className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6"
-                  >
-                    <p>{e.name}</p>
-                    <div className="flex-center gap-2">
-                      <p>{e.time.date}</p>
-                      <p>{e.time.month}</p>
-                    </div>
-                  </div>
-                ))}
-              </main>
-            </div>
-          )}
-          {progressIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>In Progress</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoProgress}
-                  issueType="progress"
-                />
-              </header>
+                <main className="w-full flex flex-col items-center">
+                  {reviewIssues.map((e, i) => (
+                    <IssueEdit
+                      id={i}
+                      type="review"
+                      clickEl={
+                        <div className="flex-between w-full">
+                          <p key={i}>{e.name}</p>
+                          <div className="flex-center gap-2">
+                            <p>{e.time.date}</p>
+                            <p>{e.time.month.slice(0, 3)}</p>
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
+                </main>
+              </div>
+            )}
 
-              <main className="w-full flex flex-col items-center">
-                {progressIssues.map((e, i) => (
-                  <div
-                    key={i}
-                    className="border-b-2 bgHover-darkgrey duration-75 border-slate-800 h-11 flex-between w-full px-6"
-                  >
-                    <picture>{e.name}</picture>
-                    <div className="flex-center gap-2">
-                      <div className="flex-center gap-2">
-                        <p>{e.time.date}</p>
-                        <p>{e.time.month}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </main>
-            </div>
-          )}
-          {todoIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>Todo</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoTodo}
-                  issueType="todo"
-                />
-              </header>
+            {progressIssues.length > 0 && (
+              <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>In Progress</p>
 
-              <main className="w-full flex flex-col items-center">
-                {todoIssues.map((e, i) => (
-                  <div className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6">
-                    <p key={i}>{e.name}</p>
-                    <div className="flex-center gap-2">
-                      <div className="flex-center gap-2">
-                        <p>{e.time.date}</p>
-                        <p>{e.time.month}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </main>
-            </div>
-          )}
-          <DragDropContext
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-          >
+                  <CreateIssue
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoProgress}
+                    issueType="progress"
+                  />
+                </header>
+
+                <main className="w-full flex flex-col items-center">
+                  {progressIssues.map((e, i) => (
+                    <IssueEdit
+                      id={i}
+                      type="progress"
+                      clickEl={
+                        <div className="flex-between w-full">
+                          <p key={i}>{e.name}</p>
+                          <div className="flex-center gap-2">
+                            <p>{e.time.date}</p>
+                            <p>{e.time.month.slice(0, 3)}</p>
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
+                </main>
+              </div>
+            )}
+
+            {todoIssues.length > 0 && (
+              <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>Todo</p>
+                  <CreateIssue
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoTodo}
+                    issueType="todo"
+                  />
+                </header>
+
+                <main className="w-full flex flex-col items-center">
+                  {todoIssues.map((e, i) => (
+                    <IssueEdit
+                      id={i}
+                      type="todo"
+                      clickEl={
+                        <div className="flex-between w-full">
+                          <p key={i}>{e.name}</p>
+                          <div className="flex-center gap-2">
+                            <p>{e.time.date}</p>
+                            <p>{e.time.month.slice(0, 3)}</p>
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
+                </main>
+              </div>
+            )}
+
             {backlogIssues.length > 0 && (
-              <Droppable droppableId="backlogContainer" type="ISSUE_TYPE">
-                {(dropabbleProvided) => (
-                  <div
-                    {...dropabbleProvided.droppableProps}
-                    ref={dropabbleProvided.innerRef}
-                  >
-                    <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                      <p>Backlog</p>
-                      {dropabbleProvided.placeholder}
-                      <CreateIssue
-                        trigger={<GoPlus />}
-                        createIssue={addIssuetoBacklog}
-                        issueType="backlog"
-                      />
-                    </header>
+              <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>Backlog</p>
+                  <CreateIssue
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoBacklog}
+                    issueType="backlog"
+                  />
+                </header>
 
-                    <main className="w-full flex flex-col items-center">
-                      {backlogIssues.map((e, i) => (
-                        <Draggable draggableId={`${i}`} index={i} key={i}>
-                          {(draggableProvided) => (
-                            <div
-                              {...draggableProvided.draggableProps}
-                              {...draggableProvided.dragHandleProps}
-                              ref={draggableProvided.innerRef}
-                              className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6"
-                            >
-                              <p key={i}>{e.name}</p>
-                              <div className="flex-center gap-2">
-                                <div className="flex-center gap-2">
-                                  <p>{e.time.date}</p>
-                                  <p>{e.time.month}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    </main>
-                  </div>
-                )}
-              </Droppable>
+                <main className="w-full flex flex-col items-center">
+                  {backlogIssues.map((e, i) => (
+                    <IssueEdit
+                      id={i}
+                      type="backlog"
+                      clickEl={
+                        <div className="flex-between w-full">
+                          <p key={i}>{e.name}</p>
+                          <div className="flex-center gap-2">
+                            <p>{e.time.date}</p>
+                            <p>{e.time.month.slice(0, 3)}</p>
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
+                </main>
+              </div>
             )}
 
             {doneIssues.length > 0 && (
-              <Droppable droppableId="doneContainer" type="ISSUE_TYPE">
-                {(dropabbleProvided) => (
-                  <div
-                    {...dropabbleProvided.droppableProps}
-                    ref={dropabbleProvided.innerRef}
-                  >
-                    <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                      <p>Done</p>
-                      {dropabbleProvided.placeholder}
-                      <CreateIssue
-                        trigger={<GoPlus />}
-                        createIssue={addIssuetoDone}
-                        issueType="done"
-                      />
-                    </header>
+              <div>
+                <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <p>Done</p>
 
-                    <main className="w-full flex flex-col items-center">
-                      {doneIssues.map((e, i) => (
-                        <Draggable draggableId={`${i}`} index={i} key={i}>
-                          {(draggableProvided) => (
-                            <div
-                              {...draggableProvided.draggableProps}
-                              {...draggableProvided.dragHandleProps}
-                              ref={draggableProvided.innerRef}
-                              className="border-b-2 bgHover-darkgrey duration-75 border-gray-800 h-11 flex-between w-full px-6"
-                            >
-                              <p key={i}>{e.name}</p>
-                              <div className="flex-center gap-2">
-                                <p>{e.time.date}</p>
-                                <p>{e.time?.month}</p>
-                              </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                    </main>
-                  </div>
-                )}
-              </Droppable>
-            )}
-          </DragDropContext>
-
-          {reviewIssues.length === 0 &&
-            progressIssues.length === 0 &&
-            todoIssues.length === 0 &&
-            backlogIssues.length === 0 &&
-            doneIssues.length === 0 && (
-              <div className="absolute w-[30rem] flex justify-center text-left flex-col px-10 gap-4 h-[25rem] translate-x-[-35%] translate-y-[-35%] left-[50%] top-[50%] bg-grey rounded-lg p-3">
-                <h1 className="text-2xl text-left font-bold py-2">
-                  All Issues
-                </h1>
-                <p className="opacity-70">
-                  All Issues is the place where you can see all of your team's
-                  work in one view.
-                </p>
-                <p className="opacity-70 mt-3">
-                  Once you have created some issues for your team, they will
-                  show up here.
-                </p>
-
-                <div className="bg-[#575AC6] w-[160px] h-[35px] flex-center rounded-md mt-5">
                   <CreateIssue
-                    trigger="create a new issue"
-                    createIssue={addIssuetoReview}
+                    trigger={<GoPlus />}
+                    createIssue={addIssuetoDone}
+                    issueType="done"
                   />
-                </div>
+                </header>
+
+                <main className="w-full flex flex-col items-center">
+                  {doneIssues.map((e, i) => (
+                    <IssueEdit
+                      id={i}
+                      type="done"
+                      clickEl={
+                        <div className="flex-between w-full">
+                          <p key={i}>{e.name}</p>
+                          <div className="flex-center gap-2">
+                            <p>{e.time.date}</p>
+                            <p>{e.time.month.slice(0, 3)}</p>
+                          </div>
+                        </div>
+                      }
+                    />
+                  ))}
+                </main>
               </div>
             )}
+
+            {reviewIssues.length === 0 &&
+              progressIssues.length === 0 &&
+              todoIssues.length === 0 &&
+              backlogIssues.length === 0 &&
+              doneIssues.length === 0 && (
+                <div className="absolute w-[30rem] flex justify-center text-left flex-col px-10 gap-4 h-[25rem] translate-x-[-35%] translate-y-[-35%] left-[50%] top-[50%] bg-grey rounded-lg p-3">
+                  <h1 className="text-2xl text-left font-bold py-2">
+                    All Issues
+                  </h1>
+                  <p className="opacity-70">
+                    All Issues is the place where you can see all of your team's
+                    work in one view.
+                  </p>
+                  <p className="opacity-70 mt-3">
+                    Once you have created some issues for your team, they will
+                    show up here.
+                  </p>
+
+                  <div className="bg-[#575AC6] w-[160px] h-[35px] flex-center rounded-md mt-5">
+                    <CreateIssue
+                      trigger="create a new issue"
+                      createIssue={addIssuetoReview}
+                    />
+                  </div>
+                </div>
+              )}
+          </Suspense>
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

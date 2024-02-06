@@ -4,9 +4,99 @@
 
 /* Reusable Colors */
 :root {
-  --primary-color: #ffffff; /* Custom primary color */
-  --secondary-color: #ededed; /* Custom secondary color */
-  --accent-color: #b8b8b8; /* Custom accent color */
+  /* Violet */
+  --violet-100: #ebebf7;
+  --violet-200: #d7d7ee;
+  --violet-300: #828fff;
+  --violet-400: #8989f0;
+  --violet-500: #7877c6;
+  --violet-600: #7876c5;
+  --violet-700: #767caf;
+  --violet-800: #7070ff;
+  --violet-900: #5e6ad2;
+  --violet-1000: #4e5cda;
+  --violet-1100: #4e5bd9;
+  --violet-1200: #4f52b4;
+  --violet-1300: #1826a3;
+  --violet-1400: #000212;
+
+  /* Gray */
+  --gray-100: #ffffff;
+  --gray-200: #fdfcfd;
+  --gray-300: #f9f8f9;
+  --gray-400: #f7f8f8;
+  --gray-500: #f5f5ff;
+  --gray-600: #f4f2f4;
+  --gray-700: #eeedef;
+  --gray-800: #ededef;
+  --gray-900: #e9e8ea;
+  --gray-1000: #e6e6e6;
+  --gray-1100: #e4e2e4;
+  --gray-1200: #dcdbdd;
+  --gray-1300: #c8c7cb;
+  --gray-1400: #b3b3b3;
+  --gray-1500: #a6a6a6;
+  --gray-1600: #a09fa6;
+  --gray-1700: #908e96;
+  --gray-1800: #86848d;
+  --gray-1900: #7e7d86;
+  --gray-2000: #706f78;
+  --gray-2100: #6f6e77;
+  --gray-2200: #6e6e6e;
+  --gray-2300: #504f57;
+  --gray-2400: #3e3e44;
+  --gray-2500: #34343a;
+  --gray-2600: #2e2e32;
+  --gray-2700: #282a30;
+  --gray-2800: #28282c;
+  --gray-2900: #232326;
+  --gray-3000: #1c1c1f;
+  --gray-3100: #161618;
+  --gray-3200: #000000;
+
+  /* Blue violet */
+  --blueViolet-100: #dfe2f6;
+  --blueViolet-200: #bac0cb;
+  --blueViolet-300: #b4bcd0;
+  --blueViolet-400: #a1a7c1;
+  --blueViolet-500: #8a8f98;
+  --blueViolet-600: #62666d;
+  --blueViolet-700: #3667c4;
+
+  /* Purple violet */
+  --purpleViolet-100: #efebfc;
+  --purpleViolet-200: #ddd0ff;
+  --purpleViolet-300: #d3c4ff;
+  --purpleViolet-400: #ac8eff;
+  --purpleViolet-500: #5b39b8;
+  --purpleViolet-600: #691eff;
+  --purpleViolet-700: #2400ff;
+  --purpleViolet-800: #1a1523;
+  --purpleViolet-900: #150b30;
+
+  /* Blue */
+  --blue-100: #d0d6e0;
+  --blue-200: #4ea7fc;
+  --blue-300: #0087ff;
+  --blue-400: #3c4149;
+
+  /* Purple */
+  --purple-100: #a771ff;
+  --purple-200: #a954ff;
+  --purple-300: #6c279d;
+
+  /* Orange */
+  --orange-100: #f2994a;
+
+  /* Purple magenta */
+  --purpleMagenta-100: #be05ff;
+
+  /* Red */
+  --red-100: #eb5757;
+
+  /* Teal */
+  --teal-100: #4cb782;
+
 }
 
 p {

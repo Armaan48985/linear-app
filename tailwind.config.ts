@@ -57,6 +57,7 @@ const config = {
         lg: "11px",
         md: "10px",
         sm: "7px",
+        smm: "5px"
       },
       keyframes: {
         "accordion-down": {

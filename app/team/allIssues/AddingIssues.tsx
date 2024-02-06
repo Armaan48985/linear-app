@@ -41,7 +41,7 @@ export const useIssueUtils = () => {
     const newIssue = {
       id: reviewIssues.length + 1,
       name: issueTitle,
-      time: [date, month],
+      time: time,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInReview;
@@ -53,7 +53,7 @@ export const useIssueUtils = () => {
     const newIssue = {
       id: progressIssues.length + 1,
       name: issueTitle,
-      time: [date, month],
+      time: time,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInProgress;
@@ -65,7 +65,7 @@ export const useIssueUtils = () => {
     const newIssue = {
       id: backlogIssues.length + 1,
       name: issueTitle,
-      time: [date, month],
+      time: time,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInBacklog;
@@ -77,7 +77,7 @@ export const useIssueUtils = () => {
     const newIssue = {
       id: doneIssues.length + 1,
       name: issueTitle,
-      time: [date, month],
+      time: time,
     };
     const selectedAction = actionCreators[value as keyof typeof actionCreators] || addInDone;
     console.log("added to done")
@@ -89,7 +89,7 @@ export const useIssueUtils = () => {
     const newIssue = {
       id: todoIssues.length + 1,
       name: issueTitle,
-      time: [date, month],
+      time: time,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInTodo;

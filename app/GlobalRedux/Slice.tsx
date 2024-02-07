@@ -6,6 +6,9 @@ export interface ArrayItem {
   id: number;
   name: string; 
   time: {date: number, month: string};
+  priority: string;
+  label: string;
+  dueDate: string;
 }
 
 // Extend the existing AppState interface

@@ -11,7 +11,10 @@ export async function addDataToFireStore(
   name: string,
   issueType: string,
   userName: string,
-  date: object
+  date: object,
+  priority: string, 
+  label: string,
+  dueDate: string
 ) {
   try {
     const userCollectionRef = collection(db, "users");
@@ -21,7 +24,7 @@ export async function addDataToFireStore(
     const issuesCollectionRef = collection(projectsDocumentRef, issueType);
     const issueDocumentRef = doc(issuesCollectionRef, name);
 
-    await setDoc(issueDocumentRef, { name: name, type: issueType, time: date });
+    await setDoc(issueDocumentRef, { name: name, type: issueType, time: date, priority : priority, label: label, dueDate: dueDate });
     return true;
   } catch (error) {
     console.error("Error adding data to Firestore:", error);

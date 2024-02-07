@@ -222,7 +222,7 @@ const Sidebar = () => {
 
             {teamDetailOpen && (
               <div className="flex flex-col gap-2">
-                <Link href="/team/issues">
+                <Link href="/team/allIssues">
                   <p className="flex items-center gap-2 bgHover-grey pl-7 py-1 group rounded-[.55rem]">
                     <span className="brightness-75 group-hover:brightness-200">
                       <GoIssueTrackedBy />

@@ -54,10 +54,14 @@ const config = {
         },
       },
       borderRadius: {
+        lgg: "15px",
         lg: "11px",
         md: "10px",
         sm: "7px",
         smm: "5px"
+      },
+      fontSize : {
+        smm: ".65rem",
       },
       keyframes: {
         "accordion-down": {

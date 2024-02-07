@@ -97,6 +97,9 @@
   /* Teal */
   --teal-100: #4cb782;
 
+  /* low opacity text */
+  --low-opacity-txt: #858699;
+
 }
 
 p {

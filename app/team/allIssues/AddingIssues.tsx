@@ -27,7 +27,7 @@ export const useIssueUtils = () => {
   var fulldate = new Date();
   var date = fulldate.getDate();
   var month = fulldate.toLocaleString("en-US", { month: "long" });
-  var time = {date, month};
+  var time = { date, month };
 
   const actionCreators: Record<string, Function> = {
     review: addInReview,
@@ -37,63 +37,148 @@ export const useIssueUtils = () => {
     done: addInDone,
   };
 
-  const addIssuetoReview = (issueTitle: string, value: string, issueType: string) => {
+  const addIssuetoReview = (
+    issueTitle: string,
+    value: string,
+    priority: string,
+    label: string,
+    dueDate: string
+  ) => {
     const newIssue = {
       id: reviewIssues.length + 1,
       name: issueTitle,
       time: time,
+      priority: priority,
+      label: label,
+      dueDate: dueDate,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInReview;
-    addDataToFireStore(issueTitle, value || "review", "naruto", time);
+    addDataToFireStore(
+      issueTitle,
+      value || "review",
+      "naruto",
+      time,
+      priority,
+      label,
+      dueDate
+    );
     dispatch(selectedAction(newIssue));
   };
 
-  const addIssuetoProgress = (issueTitle: string, value: string) => {
+  const addIssuetoProgress = (
+    issueTitle: string,
+    value: string,
+    priority: string,
+    label: string,
+    dueDate: string
+  ) => {
     const newIssue = {
-      id: progressIssues.length + 1,
+      id: reviewIssues.length + 1,
       name: issueTitle,
       time: time,
+      priority: priority,
+      label: label,
+      dueDate: dueDate,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInProgress;
-    addDataToFireStore(issueTitle, value || "progress", "naruto", time);
+    addDataToFireStore(
+      issueTitle,
+      value || "progress",
+      "naruto",
+      time,
+      priority,
+      label,
+      dueDate
+    );
     dispatch(selectedAction(newIssue));
   };
 
-  const addIssuetoBacklog = (issueTitle: string, value: string) => {
+  const addIssuetoBacklog = (
+    issueTitle: string,
+    value: string,
+    priority: string,
+    label: string,
+    dueDate: string
+  ) => {
     const newIssue = {
-      id: backlogIssues.length + 1,
+      id: reviewIssues.length + 1,
       name: issueTitle,
       time: time,
+      priority: priority,
+      label: label,
+      dueDate: dueDate,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInBacklog;
-    console.log("addign in backlog");
+    addDataToFireStore(
+      issueTitle,
+      value || "progress",
+      "naruto",
+      time,
+      priority,
+      label,
+      dueDate
+    );
     dispatch(selectedAction(newIssue));
   };
 
-  const addIssuetoDone = (issueTitle: string, value: string) => {
+  const addIssuetoDone = (
+    issueTitle: string,
+    value: string,
+    priority: string,
+    label: string,
+    dueDate: string
+  ) => {
     const newIssue = {
-      id: doneIssues.length + 1,
+      id: reviewIssues.length + 1,
       name: issueTitle,
       time: time,
+      priority: priority,
+      label: label,
+      dueDate: dueDate,
     };
-    const selectedAction = actionCreators[value as keyof typeof actionCreators] || addInDone;
-    console.log("added to done")
-    addDataToFireStore(issueTitle, value || "done", "naruto", time);
+    const selectedAction =
+      actionCreators[value as keyof typeof actionCreators] || addInDone;
+    addDataToFireStore(
+      issueTitle,
+      value || "done",
+      "naruto",
+      time,
+      priority,
+      label,
+      dueDate
+    );
     dispatch(selectedAction(newIssue));
   };
 
-  const addIssuetoTodo = (issueTitle: string, value: string) => {
+  const addIssuetoTodo = (
+    issueTitle: string,
+    value: string,
+    priority: string,
+    label: string,
+    dueDate: string
+  ) => {
     const newIssue = {
-      id: todoIssues.length + 1,
+      id: reviewIssues.length + 1,
       name: issueTitle,
       time: time,
+      priority: priority,
+      label: label,
+      dueDate: dueDate,
     };
     const selectedAction =
       actionCreators[value as keyof typeof actionCreators] || addInTodo;
-    addDataToFireStore(issueTitle, value || "todo", "naruto", time);
+    addDataToFireStore(
+      issueTitle,
+      value || "todo",
+      "naruto",
+      time,
+      priority,
+      label,
+      dueDate
+    );
     dispatch(selectedAction(newIssue));
   };
 

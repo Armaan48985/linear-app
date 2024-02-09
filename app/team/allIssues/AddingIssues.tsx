@@ -42,7 +42,7 @@ export const useIssueUtils = () => {
     value: string,
     priority: string,
     label: string,
-    dueDate: string
+    dueDate: { date: number; month: number }
   ) => {
     const newIssue = {
       id: reviewIssues.length + 1,
@@ -71,10 +71,10 @@ export const useIssueUtils = () => {
     value: string,
     priority: string,
     label: string,
-    dueDate: string
+    dueDate: { date: number; month: number }
   ) => {
     const newIssue = {
-      id: reviewIssues.length + 1,
+      id: progressIssues.length + 1,
       name: issueTitle,
       time: time,
       priority: priority,
@@ -100,10 +100,10 @@ export const useIssueUtils = () => {
     value: string,
     priority: string,
     label: string,
-    dueDate: string
+    dueDate: { date: number; month: number }
   ) => {
     const newIssue = {
-      id: reviewIssues.length + 1,
+      id: backlogIssues.length + 1,
       name: issueTitle,
       time: time,
       priority: priority,
@@ -129,10 +129,10 @@ export const useIssueUtils = () => {
     value: string,
     priority: string,
     label: string,
-    dueDate: string
+    dueDate: { date: number; month: number }
   ) => {
     const newIssue = {
-      id: reviewIssues.length + 1,
+      id: doneIssues.length + 1,
       name: issueTitle,
       time: time,
       priority: priority,
@@ -158,10 +158,10 @@ export const useIssueUtils = () => {
     value: string,
     priority: string,
     label: string,
-    dueDate: string
+    dueDate: { date: number; month: number }
   ) => {
     const newIssue = {
-      id: reviewIssues.length + 1,
+      id: todoIssues.length + 1,
       name: issueTitle,
       time: time,
       priority: priority,

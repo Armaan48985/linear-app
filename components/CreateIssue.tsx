@@ -25,13 +25,35 @@ import { Checkbox } from "./ui/checkbox";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { MdLabel } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import { MdOutlineEditCalendar } from "react-icons/md";
+import { format } from "date-fns";
+
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { BsThreeDots } from "react-icons/bs";
+import DueDateDropdown from "./dropdowns/DueDateDropdown";
 
 const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   const [issueTitle, setIssueTitle] = useState("");
   const [value, setValue] = useState(issueType);
   const [priority, setPriority] = useState("");
   const [label, setLabel] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [dueDate, setDueDate] = useState<Date>();
+
+  const today = new Date();
+  let differenceInDays: Number;
+
+  if (dueDate) {
+    const differenceInMs = dueDate.getTime() - today.getTime();
+    differenceInDays = Math.ceil(differenceInMs / (1000 * 3600 * 24));
+  } else {
+    differenceInDays = 0;
+  }
 
   const handleSelectType = (selectedValue: string) => {
     setValue(selectedValue);
@@ -44,18 +66,18 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   const handleSelectLabel = (e: string) => {
     setLabel(e);
   };
-  const handleSelectDueDate = (e: string) => {
-    setDueDate(e);
-  };
 
   const handleSaveIssue = () => {
     if (issueTitle.trim() !== "") {
-      createIssue(issueTitle, value, priority, label, dueDate);
+      createIssue(issueTitle, value, priority, label, {
+        date: dueDate?.getDate(),
+        month: dueDate?.getMonth(),
+      });
       console.log("priority sent from createIssue:", priority);
       setIssueTitle("");
       setPriority("");
       setLabel("");
-      setDueDate("");
+      setDueDate(undefined);
     }
   };
 
@@ -92,7 +114,7 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
             <Select onValueChange={handleSelectType}>
               <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm group">
                 <SelectValue
-                  placeholder={value}
+                  placeholder={value || "backlog"}
                   className="text-red-900 group-hover:placeholder:opacity-100"
                 />
               </SelectTrigger>
@@ -210,29 +232,22 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
                 <SelectValue placeholder="project" />
               </SelectTrigger>
             </Select>
-            <Select>
-              <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
-                <SelectValue placeholder="doticon" />
-              </SelectTrigger>
-              <SelectContent className="w-[200px] bg-grey shadow-none border-2 border-[--gray-2300]">
-                <SelectGroup className="flex flex-col justify-start items-start">
-                  <SelectItem
-                    value="backlog"
-                    className="pl-3 py-2"
-                    onClick={() => handleSelectDueDate}
-                  >
-                    Set due date...
-                  </SelectItem>
-                  <SelectItem value="todo" className="pl-3 py-2">
-                    Link to URL...
-                  </SelectItem>
-                  <Separator className="bg-white text-white h-[5px]" />
-                  <SelectItem value="progress" className="pl-3 py-2">
-                    Add sub-issue
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+
+            {dueDate && (
+              <DueDateDropdown
+                date={dueDate}
+                setDate={setDueDate}
+                trigger={differenceInDays + " days"}
+              />
+            )}
+
+            <div>
+              <DueDateDropdown
+                date={dueDate}
+                setDate={setDueDate}
+                trigger={<BsThreeDots />}
+              />
+            </div>
           </div>
         </div>
         <DialogFooter className="border-t-2 border-gray-600">

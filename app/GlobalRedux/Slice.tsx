@@ -1,14 +1,14 @@
-﻿'use client'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
+﻿"use client";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useEffect } from "react";
 
 export interface ArrayItem {
   id: number;
-  name: string; 
-  time: {date: number, month: string};
+  name: string;
+  time: { date: number; month: string };
   priority: string;
   label: string;
-  dueDate: string;
+  dueDate:{ date: number; month: number };
 }
 
 // Extend the existing AppState interface
@@ -24,7 +24,7 @@ export interface AppState {
 }
 
 const initialState: AppState = {
-  value: 'todo',
+  value: "todo",
   isOpened: false,
   backlogIssues: [],
   progressIssues: [],
@@ -33,9 +33,8 @@ const initialState: AppState = {
   reviewIssues: [],
 };
 
-
 const appSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     setValue: (state: AppState, action: PayloadAction<string>) => {
@@ -61,29 +60,38 @@ const appSlice = createSlice({
     },
     deleteFromReview: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      state.reviewIssues = state.reviewIssues.filter((_, index) => index !== indexToDelete);
+      state.reviewIssues = state.reviewIssues.filter(
+        (_, index) => index !== indexToDelete
+      );
     },
-    
+
     deleteFromProgress: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      state.progressIssues = state.progressIssues.filter((_, index) => index !== indexToDelete);
+      state.progressIssues = state.progressIssues.filter(
+        (_, index) => index !== indexToDelete
+      );
     },
-    
+
     deleteFromTodo: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      state.todoIssues = state.todoIssues.filter((_, index) => index !== indexToDelete);
+      state.todoIssues = state.todoIssues.filter(
+        (_, index) => index !== indexToDelete
+      );
     },
-    
+
     deleteFromBacklog: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      state.backlogIssues = state.backlogIssues.filter((_, index) => index !== indexToDelete);
+      state.backlogIssues = state.backlogIssues.filter(
+        (_, index) => index !== indexToDelete
+      );
     },
-    
+
     deleteFromDone: (state: AppState, action: PayloadAction<number>) => {
       const indexToDelete = action.payload;
-      state.doneIssues = state.doneIssues.filter((_, index) => index !== indexToDelete);
+      state.doneIssues = state.doneIssues.filter(
+        (_, index) => index !== indexToDelete
+      );
     },
-    
   },
 });
 

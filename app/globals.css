@@ -99,7 +99,6 @@
 
   /* low opacity text */
   --low-opacity-txt: #858699;
-
 }
 
 p {
@@ -120,8 +119,12 @@ p {
   background-color: rgb(39, 41, 57);
 }
 
-.bg-darkgrey{
+.bg-darkgrey {
   background-color: rgb(30, 32, 43);
+}
+
+.bg-darkergrey {
+  background-color: rgb(25, 26, 39);
 }
 
 .bgHover-grey:hover {
@@ -136,14 +139,13 @@ p {
   background-color: rgb(31, 33, 46);
 }
 
-.hover-icon{
-  opacity: .6;
+.hover-icon {
+  opacity: 0.6;
 }
 
-.hover-icon:hover{
+.hover-icon:hover {
   opacity: 1;
 }
-
 
 .dim-element {
   opacity: 0.8;
@@ -214,7 +216,7 @@ p {
 body {
   background-color: #1a1a1a;
   color: #ecf0f1;
-  font-family: "Arial", sans-serif; 
+  font-family: "Arial", sans-serif;
 }
 
 .sm-icon {
@@ -253,20 +255,14 @@ body {
   opacity: 1;
 }
 
-.flex-center{
+.flex-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.flex-between{
+.flex-between {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-
-
-
-
-

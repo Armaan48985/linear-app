@@ -6,7 +6,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import "@/app/globals.css";
-import { FaDotCircle, FaRegStar } from "react-icons/fa";
+import { FaDotCircle, FaRegCalendar, FaRegStar } from "react-icons/fa";
 import { FaAlignJustify } from "react-icons/fa6";
 import { LuAlignVerticalJustifyCenter } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
@@ -30,9 +30,24 @@ import { IssueEdit } from "@/components/issueEdit";
 import { BsThreeDots } from "react-icons/bs";
 import PriorityCheck from "@/components/PriorityCheck";
 import { FaUser } from "react-icons/fa";
+import RightSidebar from "@/components/RightSidebar";
 
 const page = () => {
-  const dispatch = useDispatch();
+  const months: string[] = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   const backlogIssues = useSelector(
     (state: RootState) => state.app.backlogIssues
   );
@@ -71,6 +86,21 @@ const page = () => {
       window.removeEventListener("beforeunload", clearLocalStorage);
     };
   }, []);
+
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      const storedValue = localStorage.getItem("rightSidebarOpen");
+      return storedValue ? JSON.parse(storedValue) : false;
+    } else {
+      return false; // Default value if localStorage is not available
+    }
+  });
+
+  const handleClick = () => {
+    const newValue = !rightSidebarOpen; // Toggle the value
+    setRightSidebarOpen(newValue); // Update the state
+    localStorage.setItem("rightSidebarOpen", JSON.stringify(newValue)); // Store in local storage
+  };
 
   const {
     addIssuetoBacklog,
@@ -151,325 +181,378 @@ const page = () => {
 
               <div className="h-5 w-[2px] bg-gray-600 mr-3"></div>
 
-              <span className="icon-hover font-extrabold text-md ml-3">
+              <span
+                className="icon-hover font-extrabold text-md ml-3"
+                onClick={handleClick}
+              >
                 <BsLayoutSidebarReverse />
               </span>
             </div>
           </nav>
 
-          {reviewIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>Review</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoReview}
-                  issueType="review"
-                />
-              </header>
+          <div className="flex">
+            <div className="w-full">
+              {reviewIssues.length > 0 && (
+                <div>
+                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                    <p>Review</p>
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoReview}
+                      issueType="review"
+                    />
+                  </header>
 
-              <main className="w-full flex flex-col items-center">
-                {reviewIssues.map((e, i) => (
-                  <IssueEdit
-                    key={i}
-                    id={i}
-                    type="review"
-                    clickEl={
-                      <div className="flex-between w-full">
-                        <div className="flex-between gap-3">
-                          <PriorityCheck priority={e.priority} />
-                          <p key={i}>{e.name}</p>
-                        </div>
-                        <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                          {e.label && (
-                            <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                              <span
-                                className={`${
-                                  e.label == "bug"
-                                    ? "text-[--red-100]"
-                                    : e.label == "feature"
-                                    ? "text-[--blue-300]"
-                                    : "text-[--purpleMagenta-100]"
-                                } text-2xl`}
-                              >
-                                <GoDotFill />
+                  <main className="w-full flex flex-col items-center">
+                    {reviewIssues.map((e, i) => (
+                      <IssueEdit
+                        key={i}
+                        id={i}
+                        type="review"
+                        clickEl={
+                          <div className="flex-between w-full">
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              <div className="flex-center gap-2 text-md">
+                                <p>{e.time.date}</p>
+                                <p>{e.time.month.slice(0, 3)}</p>
+                              </div>
+
+                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                <FaUser />
                               </span>
-                              {e.label}
-                            </span>
-                          )}
-                          <div className="flex-center gap-2 text-md">
-                            <p>{e.time.date}</p>
-                            <p>{e.time.month.slice(0, 3)}</p>
+                            </div>
                           </div>
-
-                          <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                            <FaUser />
-                          </span>
-                        </div>
-                      </div>
-                    }
-                  />
-                ))}
-              </main>
-            </div>
-          )}
-
-          {progressIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>In Progress</p>
-
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoProgress}
-                  issueType="progress"
-                />
-              </header>
-
-              <main className="w-full flex flex-col items-center">
-                {progressIssues.map((e, i) => (
-                  <IssueEdit
-                    key={i}
-                    id={i}
-                    type="progress"
-                    clickEl={
-                      <div className="flex-between w-full">
-                        <div className="flex-between gap-3">
-                          <PriorityCheck priority={e.priority} />
-                          <p key={i}>{e.name}</p>
-                        </div>
-                        <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                          {e.label && (
-                            <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                              <span
-                                className={`${
-                                  e.label == "bug"
-                                    ? "text-[--red-100]"
-                                    : e.label == "feature"
-                                    ? "text-[--blue-300]"
-                                    : "text-[--purpleMagenta-100]"
-                                } text-2xl`}
-                              >
-                                <GoDotFill />
-                              </span>
-                              {e.label}
-                            </span>
-                          )}
-                          <div className="flex-center gap-2 text-md">
-                            <p>{e.time.date}</p>
-                            <p>{e.time.month.slice(0, 3)}</p>
-                          </div>
-
-                          <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                            <FaUser />
-                          </span>
-                        </div>
-                      </div>
-                    }
-                  />
-                ))}
-              </main>
-            </div>
-          )}
-
-          {todoIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>Todo</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoTodo}
-                  issueType="todo"
-                />
-              </header>
-
-              <main className="w-full flex flex-col items-center">
-                {todoIssues.map((e, i) => (
-                  <IssueEdit
-                    key={i}
-                    id={i}
-                    type="todo"
-                    clickEl={
-                      <div className="flex-between w-full">
-                        <div className="flex-between gap-3">
-                          <PriorityCheck priority={e.priority} />
-                          <p key={i}>{e.name}</p>
-                        </div>
-                        <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                          {e.label && (
-                            <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                              <span
-                                className={`${
-                                  e.label == "bug"
-                                    ? "text-[--red-100]"
-                                    : e.label == "feature"
-                                    ? "text-[--blue-300]"
-                                    : "text-[--purpleMagenta-100]"
-                                } text-2xl`}
-                              >
-                                <GoDotFill />
-                              </span>
-                              {e.label}
-                            </span>
-                          )}
-                          <div className="flex-center gap-2 text-md">
-                            <p>{e.time.date}</p>
-                            <p>{e.time.month.slice(0, 3)}</p>
-                          </div>
-
-                          <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                            <FaUser />
-                          </span>
-                        </div>
-                      </div>
-                    }
-                  />
-                ))}
-              </main>
-            </div>
-          )}
-
-          {backlogIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>Backlog</p>
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoBacklog}
-                  issueType="backlog"
-                />
-              </header>
-
-              <main className="w-full flex flex-col items-center">
-                {backlogIssues.map((e, i) => (
-                  <IssueEdit
-                    key={i}
-                    id={i}
-                    type="backlog"
-                    clickEl={
-                      <div className="flex-between w-full">
-                        <div className="flex-between gap-3">
-                          <PriorityCheck priority={e.priority} />
-                          <p key={i}>{e.name}</p>
-                        </div>
-                        <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                          {e.label && (
-                            <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                              <span
-                                className={`${
-                                  e.label == "bug"
-                                    ? "text-[--red-100]"
-                                    : e.label == "feature"
-                                    ? "text-[--blue-300]"
-                                    : "text-[--purpleMagenta-100]"
-                                } text-2xl`}
-                              >
-                                <GoDotFill />
-                              </span>
-                              {e.label}
-                            </span>
-                          )}
-                          <div className="flex-center gap-2 text-md">
-                            <p>{e.time.date}</p>
-                            <p>{e.time.month.slice(0, 3)}</p>
-                          </div>
-
-                          <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                            <FaUser />
-                          </span>
-                        </div>
-                      </div>
-                    }
-                  />
-                ))}
-              </main>
-            </div>
-          )}
-
-          {doneIssues.length > 0 && (
-            <div>
-              <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                <p>Done</p>
-
-                <CreateIssue
-                  trigger={<GoPlus />}
-                  createIssue={addIssuetoDone}
-                  issueType="done"
-                />
-              </header>
-
-              <main className="w-full flex flex-col items-center">
-                {doneIssues.map((e, i) => (
-                  <IssueEdit
-                    id={i}
-                    key={i}
-                    type="done"
-                    clickEl={
-                      <div className="flex-between w-full">
-                        <div className="flex-between gap-3">
-                          <PriorityCheck priority={e.priority} />
-                          <p key={i}>{e.name}</p>
-                        </div>
-                        <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                          {e.label && (
-                            <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                              <span
-                                className={`${
-                                  e.label == "bug"
-                                    ? "text-[--red-100]"
-                                    : e.label == "feature"
-                                    ? "text-[--blue-300]"
-                                    : "text-[--purpleMagenta-100]"
-                                } text-2xl`}
-                              >
-                                <GoDotFill />
-                              </span>
-                              {e.label}
-                            </span>
-                          )}
-                          <div className="flex-center gap-2 text-md">
-                            <p>{e.time.date}</p>
-                            <p>{e.time.month.slice(0, 3)}</p>
-                          </div>
-
-                          <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                            <FaUser />
-                          </span>
-                        </div>
-                      </div>
-                    }
-                  />
-                ))}
-              </main>
-            </div>
-          )}
-
-          {reviewIssues.length === 0 &&
-            progressIssues.length === 0 &&
-            todoIssues.length === 0 &&
-            backlogIssues.length === 0 &&
-            doneIssues.length === 0 && (
-              <div className="absolute w-[30rem] flex justify-center text-left flex-col px-10 gap-4 h-[25rem] translate-x-[-35%] translate-y-[-35%] left-[50%] top-[50%] bg-grey rounded-lg p-3">
-                <h1 className="text-2xl text-left font-bold py-2">
-                  All Issues
-                </h1>
-                <p className="opacity-70">
-                  All Issues is the place where you can see all of your team's
-                  work in one view.
-                </p>
-                <p className="opacity-70 mt-3">
-                  Once you have created some issues for your team, they will
-                  show up here.
-                </p>
-
-                <div className="bg-[#575AC6] w-[160px] h-[35px] flex-center rounded-md mt-5">
-                  <CreateIssue
-                    trigger="create a new issue"
-                    createIssue={addIssuetoReview}
-                  />
+                        }
+                      />
+                    ))}
+                  </main>
                 </div>
+              )}
+
+              {progressIssues.length > 0 && (
+                <div>
+                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                    <p>In Progress</p>
+
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoProgress}
+                      issueType="progress"
+                    />
+                  </header>
+
+                  <main className="w-full flex flex-col items-center">
+                    {progressIssues.map((e, i) => (
+                      <IssueEdit
+                        key={i}
+                        id={i}
+                        type="progress"
+                        clickEl={
+                          <div className="flex-between w-full">
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              <div className="flex-center gap-2 text-md">
+                                <p>{e.time.date}</p>
+                                <p>{e.time.month.slice(0, 3)}</p>
+                              </div>
+
+                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                <FaUser />
+                              </span>
+                            </div>
+                          </div>
+                        }
+                      />
+                    ))}
+                  </main>
+                </div>
+              )}
+
+              {todoIssues.length > 0 && (
+                <div>
+                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                    <p>Todo</p>
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoTodo}
+                      issueType="todo"
+                    />
+                  </header>
+
+                  <main className="w-full flex flex-col items-center">
+                    {todoIssues.map((e, i) => (
+                      <IssueEdit
+                        key={i}
+                        id={i}
+                        type="todo"
+                        clickEl={
+                          <div className="flex-between w-full">
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              <div className="flex-center gap-2 text-md">
+                                <p>{e.time.date}</p>
+                                <p>{e.time.month.slice(0, 3)}</p>
+                              </div>
+
+                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                <FaUser />
+                              </span>
+                            </div>
+                          </div>
+                        }
+                      />
+                    ))}
+                  </main>
+                </div>
+              )}
+
+              {backlogIssues.length > 0 && (
+                <div>
+                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                    <p>Backlog</p>
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoBacklog}
+                      issueType="backlog"
+                    />
+                  </header>
+
+                  <main className="w-full flex flex-col items-center">
+                    {backlogIssues.map((e, i) => (
+                      <IssueEdit
+                        key={i}
+                        id={i}
+                        type="backlog"
+                        clickEl={
+                          <div className="flex-between w-full">
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-2 py-[1px] border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              <div className="flex-center gap-2 text-md">
+                                <p>{e.time.date}</p>
+                                <p>{e.time.month.slice(0, 3)}</p>
+                              </div>
+
+                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                <FaUser />
+                              </span>
+                            </div>
+                          </div>
+                        }
+                      />
+                    ))}
+                  </main>
+                </div>
+              )}
+
+              {doneIssues.length > 0 && (
+                <div>
+                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                    <p>Done</p>
+
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoDone}
+                      issueType="done"
+                    />
+                  </header>
+
+                  <main className="w-full flex flex-col items-center">
+                    {doneIssues.map((e, i) => (
+                      <IssueEdit
+                        id={i}
+                        key={i}
+                        type="done"
+                        clickEl={
+                          <div className="flex-between w-full">
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              <div className="flex-center gap-2 text-md">
+                                <p>{e.time.date}</p>
+                                <p>{e.time.month.slice(0, 3)}</p>
+                              </div>
+
+                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                <FaUser />
+                              </span>
+                            </div>
+                          </div>
+                        }
+                      />
+                    ))}
+                  </main>
+                </div>
+              )}
+
+              {reviewIssues.length === 0 &&
+                progressIssues.length === 0 &&
+                todoIssues.length === 0 &&
+                backlogIssues.length === 0 &&
+                doneIssues.length === 0 && (
+                  <div className="absolute w-[30rem] flex justify-center text-left flex-col px-10 gap-4 h-[25rem] translate-x-[-35%] translate-y-[-35%] left-[50%] top-[50%] bg-grey rounded-lg p-3">
+                    <h1 className="text-2xl text-left font-bold py-2">
+                      All Issues
+                    </h1>
+                    <p className="opacity-70">
+                      All Issues is the place where you can see all of your
+                      team's work in one view.
+                    </p>
+                    <p className="opacity-70 mt-3">
+                      Once you have created some issues for your team, they will
+                      show up here.
+                    </p>
+
+                    <div className="bg-[#575AC6] w-[160px] h-[35px] flex-center rounded-md mt-5">
+                      <CreateIssue
+                        trigger="create a new issue"
+                        createIssue={addIssuetoReview}
+                      />
+                    </div>
+                  </div>
+                )}
+            </div>
+
+            {rightSidebarOpen && (
+              <div className="w-[28rem]">
+                <RightSidebar />
               </div>
             )}
+          </div>
         </div>
       </ResizablePanel>
     </ResizablePanelGroup>

@@ -61,6 +61,7 @@ const page = () => {
   );
 
   const { fetchDataAndInitializeState } = fetchIssues();
+  const [horizontal, setHorizontal] = useState(true);
 
   useEffect(() => {
     const storedInitialized = localStorage.getItem("initialized"); // Check local storage
@@ -86,6 +87,8 @@ const page = () => {
       window.removeEventListener("beforeunload", clearLocalStorage);
     };
   }, []);
+
+  console.log(horizontal);
 
   const [rightSidebarOpen, setRightSidebarOpen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -140,6 +143,7 @@ const page = () => {
                       <Button
                         variant="default"
                         className="bg-grey rounded-lg px-3 h-7"
+                        onClick={() => setHorizontal(false)}
                       >
                         <FaAlignJustify />
                       </Button>
@@ -159,6 +163,7 @@ const page = () => {
                       <Button
                         variant="default"
                         className="bg-darkgrey rounded-lg px-3 h-7 icon-hover"
+                        onClick={() => setHorizontal(true)}
                       >
                         <LuAlignVerticalJustifyCenter />
                       </Button>
@@ -190,11 +195,15 @@ const page = () => {
             </div>
           </nav>
 
-          <div className="flex">
-            <div className="w-full">
+          <div className="flex overflow-x-scroll overflow-y-hidden min-h-[93vh]">
+            <div className={`w-full ${horizontal ? "flex" : "block"}`}>
               {reviewIssues.length > 0 && (
                 <div>
-                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <header
+                    className={`w-full h-11 flex-between px-6 ${
+                      horizontal ? "bg-body w-[400px]" : "bg-darkgrey"
+                    }`}
+                  >
                     <p>Review</p>
                     <CreateIssue
                       trigger={<GoPlus />}
@@ -210,18 +219,25 @@ const page = () => {
                         id={i}
                         type="review"
                         clickEl={
-                          <div className="flex-between w-full">
+                          <div
+                            className={`flex-between w-full ${
+                              horizontal
+                                ? "bg-grey border-2 border-green-200 mt-10 p-2 py-5 flex-col rounded-md mb-10"
+                                : ""
+                            }`}
+                          >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate && (
+                              {e.dueDate.date != -1 && (
                                 <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
                                   <span>
                                     <FaRegCalendar />
                                   </span>
-                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
                                 </span>
                               )}
                               {e.label && (
@@ -282,12 +298,13 @@ const page = () => {
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate && (
+                              {e.dueDate.date != -1 && (
                                 <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
                                   <span>
                                     <FaRegCalendar />
                                   </span>
-                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
                                 </span>
                               )}
                               {e.label && (
@@ -347,12 +364,13 @@ const page = () => {
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate && (
+                              {e.dueDate.date != -1 && (
                                 <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
                                   <span>
                                     <FaRegCalendar />
                                   </span>
-                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
                                 </span>
                               )}
                               {e.label && (
@@ -412,12 +430,13 @@ const page = () => {
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate && (
+                              {e.dueDate.date != -1 && (
                                 <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
                                   <span>
                                     <FaRegCalendar />
                                   </span>
-                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
                                 </span>
                               )}
                               {e.label && (
@@ -478,12 +497,14 @@ const page = () => {
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate && (
+                              {e.dueDate.date != -1 && (
                                 <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
                                   <span>
                                     <FaRegCalendar />
+                                    dfdf
                                   </span>
-                                  {e.dueDate.date} {months[e.dueDate.month]}
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
                                 </span>
                               )}
                               {e.label && (

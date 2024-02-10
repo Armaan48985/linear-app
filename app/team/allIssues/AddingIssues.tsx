@@ -150,6 +150,7 @@ export const useIssueUtils = () => {
       label,
       dueDate
     );
+    console.log("added");
     dispatch(selectedAction(newIssue));
   };
 

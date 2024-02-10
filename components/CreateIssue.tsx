@@ -70,8 +70,8 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   const handleSaveIssue = () => {
     if (issueTitle.trim() !== "") {
       createIssue(issueTitle, value, priority, label, {
-        date: dueDate?.getDate(),
-        month: dueDate?.getMonth(),
+        date: dueDate?.getDate() || -1,
+        month: dueDate?.getMonth() || -1,
       });
       console.log("priority sent from createIssue:", priority);
       setIssueTitle("");

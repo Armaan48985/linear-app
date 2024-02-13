@@ -10,8 +10,9 @@ import { RootState } from "@/app/GlobalRedux/reducers";
 import { useIssueUtils } from "@/app/team/allIssues/AddingIssues";
 
 export const DropArea = ({ issue, title }: any) => {
-
-  const [issues, setIssues] = useState<{ id: string; name: string; type: string; time: Date }[]>([]);
+  const [issues, setIssues] = useState<
+    { id: string; name: string; type: string; time: Date }[]
+  >([]);
 
   useEffect(() => setIssues(issue), []);
   const [, drop] = useDrop(() => ({
@@ -23,7 +24,7 @@ export const DropArea = ({ issue, title }: any) => {
       isOver: !!monitor.isOver(),
     }),
   }));
-  
+
   const {
     addIssuetoBacklog,
     addIssuetoDone,
@@ -36,7 +37,11 @@ export const DropArea = ({ issue, title }: any) => {
     <div>
       {issues.length > 0 && (
         <div>
-          <header className="bg-darkgrey w-full h-11 flex-between px-6">
+          <header
+            className={`w-full h-11 flex-between px-6 ${
+              horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
+            }`}
+          >
             <p>{title}</p>
             <CreateIssue trigger={<GoPlus />} createIssue={addIssuetoDone} />
           </header>

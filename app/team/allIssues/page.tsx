@@ -195,13 +195,13 @@ const page = () => {
             </div>
           </nav>
 
-          <div className="flex overflow-x-scroll overflow-y-hidden min-h-[93vh]">
+          <div className="flex overflow-x-auto overflow-y-hidden min-h-[93vh]">
             <div className={`w-full ${horizontal ? "flex" : "block"}`}>
               {reviewIssues.length > 0 && (
                 <div>
                   <header
                     className={`w-full h-11 flex-between px-6 ${
-                      horizontal ? "bg-body w-[400px]" : "bg-darkgrey"
+                      horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
                     }`}
                   >
                     <p>Review</p>
@@ -212,7 +212,13 @@ const page = () => {
                     />
                   </header>
 
-                  <main className="w-full flex flex-col items-center">
+                  <main
+                    className={`w-full flex flex-col ${
+                      horizontal
+                        ? "mt-10 items-start justify-start gap-20"
+                        : " items-center"
+                    }`}
+                  >
                     {reviewIssues.map((e, i) => (
                       <IssueEdit
                         key={i}
@@ -220,10 +226,97 @@ const page = () => {
                         type="review"
                         clickEl={
                           <div
-                            className={`flex-between w-full ${
+                            className={`flex w-full ${
                               horizontal
-                                ? "bg-grey border-2 border-green-200 mt-10 p-2 py-5 flex-col rounded-md mb-10"
-                                : ""
+                                ? "bg-darkgrey py-3 pl-2 h-[100px] border-2 border-gray-600 mt-104 flex-col justify-start items-start rounded-sm"
+                                : "justify-between"
+                            }`}
+                          >
+                            <div className="flex-between gap-3">
+                              <PriorityCheck priority={e.priority} />
+                              <p key={i}>{e.name}</p>
+                            </div>
+                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
+                              {e.dueDate.date != -1 && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span>
+                                    <FaRegCalendar />
+                                  </span>
+                                  {e.dueDate.date}{" "}
+                                  {months[e.dueDate.month]?.slice(0, 3)}
+                                </span>
+                              )}
+                              {e.label && (
+                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
+                                  <span
+                                    className={`${
+                                      e.label == "bug"
+                                        ? "text-[--red-100]"
+                                        : e.label == "feature"
+                                        ? "text-[--blue-300]"
+                                        : "text-[--purpleMagenta-100]"
+                                    } text-2xl`}
+                                  >
+                                    <GoDotFill />
+                                  </span>
+                                  {e.label}
+                                </span>
+                              )}
+                              {!horizontal && (
+                                <div className="flex-center gap-2 text-md">
+                                  <p>{e.time.date}</p>
+                                  <p>{e.time.month.slice(0, 3)}</p>
+                                </div>
+                              )}
+
+                              {!horizontal && (
+                                <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
+                                  <FaUser />
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        }
+                      />
+                    ))}
+                  </main>
+                </div>
+              )}
+
+              {progressIssues.length > 0 && (
+                <div>
+                  <header
+                    className={`w-full h-11 flex-between px-6 ${
+                      horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
+                    }`}
+                  >
+                    <p>In Progress</p>
+
+                    <CreateIssue
+                      trigger={<GoPlus />}
+                      createIssue={addIssuetoProgress}
+                      issueType="progress"
+                    />
+                  </header>
+
+                  <main
+                    className={`w-full flex flex-col ${
+                      horizontal
+                        ? "mt-10 items-start justify-start gap-20"
+                        : " items-center"
+                    }`}
+                  >
+                    {progressIssues.map((e, i) => (
+                      <IssueEdit
+                        key={i}
+                        id={i}
+                        type="progress"
+                        clickEl={
+                          <div
+                            className={`flex w-full ${
+                              horizontal
+                                ? "bg-darkgrey py-3 pl-2 h-[100px] border-2 border-gray-600 mt-104 flex-col justify-start items-start rounded-sm"
+                                : "justify-between"
                             }`}
                           >
                             <div className="flex-between gap-3">
@@ -273,76 +366,13 @@ const page = () => {
                 </div>
               )}
 
-              {progressIssues.length > 0 && (
-                <div>
-                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
-                    <p>In Progress</p>
-
-                    <CreateIssue
-                      trigger={<GoPlus />}
-                      createIssue={addIssuetoProgress}
-                      issueType="progress"
-                    />
-                  </header>
-
-                  <main className="w-full flex flex-col items-center">
-                    {progressIssues.map((e, i) => (
-                      <IssueEdit
-                        key={i}
-                        id={i}
-                        type="progress"
-                        clickEl={
-                          <div className="flex-between w-full">
-                            <div className="flex-between gap-3">
-                              <PriorityCheck priority={e.priority} />
-                              <p key={i}>{e.name}</p>
-                            </div>
-                            <div className="flex-center gap-3 text-[--low-opacity-txt]">
-                              {e.dueDate.date != -1 && (
-                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                                  <span>
-                                    <FaRegCalendar />
-                                  </span>
-                                  {e.dueDate.date}{" "}
-                                  {months[e.dueDate.month]?.slice(0, 3)}
-                                </span>
-                              )}
-                              {e.label && (
-                                <span className="rounded-lgg flex-center gap-2 text-sm px-3 py-1 border-[1px] border-gray-800">
-                                  <span
-                                    className={`${
-                                      e.label == "bug"
-                                        ? "text-[--red-100]"
-                                        : e.label == "feature"
-                                        ? "text-[--blue-300]"
-                                        : "text-[--purpleMagenta-100]"
-                                    } text-2xl`}
-                                  >
-                                    <GoDotFill />
-                                  </span>
-                                  {e.label}
-                                </span>
-                              )}
-                              <div className="flex-center gap-2 text-md">
-                                <p>{e.time.date}</p>
-                                <p>{e.time.month.slice(0, 3)}</p>
-                              </div>
-
-                              <span className="text-[9px] border-2 border-dotted border-[--low-opacity-txt] rounded-full p-[.1rem]">
-                                <FaUser />
-                              </span>
-                            </div>
-                          </div>
-                        }
-                      />
-                    ))}
-                  </main>
-                </div>
-              )}
-
               {todoIssues.length > 0 && (
                 <div>
-                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <header
+                    className={`w-full h-11 flex-between px-6 ${
+                      horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
+                    }`}
+                  >
                     <p>Todo</p>
                     <CreateIssue
                       trigger={<GoPlus />}
@@ -351,14 +381,26 @@ const page = () => {
                     />
                   </header>
 
-                  <main className="w-full flex flex-col items-center">
+                  <main
+                    className={`w-full flex flex-col ${
+                      horizontal
+                        ? "mt-10 items-start justify-start gap-20"
+                        : " items-center"
+                    }`}
+                  >
                     {todoIssues.map((e, i) => (
                       <IssueEdit
                         key={i}
                         id={i}
                         type="todo"
                         clickEl={
-                          <div className="flex-between w-full">
+                          <div
+                            className={`flex w-full ${
+                              horizontal
+                                ? "bg-darkgrey py-3 pl-2 h-[100px] border-2 border-gray-600 mt-104 flex-col justify-start items-start rounded-sm"
+                                : "justify-between"
+                            }`}
+                          >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
                               <p key={i}>{e.name}</p>
@@ -408,7 +450,11 @@ const page = () => {
 
               {backlogIssues.length > 0 && (
                 <div>
-                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <header
+                    className={`w-full h-11 flex-between px-6 ${
+                      horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
+                    }`}
+                  >
                     <p>Backlog</p>
                     <CreateIssue
                       trigger={<GoPlus />}
@@ -417,14 +463,26 @@ const page = () => {
                     />
                   </header>
 
-                  <main className="w-full flex flex-col items-center">
+                  <main
+                    className={`w-full flex flex-col ${
+                      horizontal
+                        ? "mt-10 items-start justify-start gap-20"
+                        : " items-center"
+                    }`}
+                  >
                     {backlogIssues.map((e, i) => (
                       <IssueEdit
                         key={i}
                         id={i}
                         type="backlog"
                         clickEl={
-                          <div className="flex-between w-full">
+                          <div
+                            className={`flex w-full ${
+                              horizontal
+                                ? "bg-darkgrey py-3 pl-2 h-[100px] border-2 border-gray-600 mt-104 flex-col justify-start items-start rounded-sm"
+                                : "justify-between"
+                            }`}
+                          >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
                               <p key={i}>{e.name}</p>
@@ -474,7 +532,11 @@ const page = () => {
 
               {doneIssues.length > 0 && (
                 <div>
-                  <header className="bg-darkgrey w-full h-11 flex-between px-6">
+                  <header
+                    className={`w-full h-11 flex-between px-6 ${
+                      horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
+                    }`}
+                  >
                     <p>Done</p>
 
                     <CreateIssue
@@ -484,14 +546,26 @@ const page = () => {
                     />
                   </header>
 
-                  <main className="w-full flex flex-col items-center">
+                  <main
+                    className={`w-full flex flex-col ${
+                      horizontal
+                        ? "mt-10 items-start justify-start gap-20"
+                        : " items-center"
+                    }`}
+                  >
                     {doneIssues.map((e, i) => (
                       <IssueEdit
                         id={i}
                         key={i}
                         type="done"
                         clickEl={
-                          <div className="flex-between w-full">
+                          <div
+                            className={`flex w-full ${
+                              horizontal
+                                ? "bg-darkgrey py-3 pl-2 h-[100px] border-2 border-gray-600 mt-104 flex-col justify-start items-start rounded-sm"
+                                : "justify-between"
+                            }`}
+                          >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
                               <p key={i}>{e.name}</p>

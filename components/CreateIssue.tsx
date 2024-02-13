@@ -23,7 +23,11 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
 import { Separator } from "@radix-ui/react-dropdown-menu";
-import { MdLabel } from "react-icons/md";
+import {
+  MdLabel,
+  MdOutlineSignalCellularAlt2Bar,
+  MdSignalCellularAlt1Bar,
+} from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { MdOutlineEditCalendar } from "react-icons/md";
 import { format } from "date-fns";
@@ -37,6 +41,15 @@ import {
 } from "@/components/ui/popover";
 import { BsThreeDots } from "react-icons/bs";
 import DueDateDropdown from "./dropdowns/DueDateDropdown";
+import { TbCircleDotted } from "react-icons/tb";
+import { FaRegCircle } from "react-icons/fa";
+import { PiCircleHalfFill } from "react-icons/pi";
+import {
+  BiSolidCircleThreeQuarter,
+  BiSolidMessageSquareError,
+} from "react-icons/bi";
+import { FaCheckCircle } from "react-icons/fa";
+import { LiaSignalSolid } from "react-icons/lia";
 
 const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   const [issueTitle, setIssueTitle] = useState("");
@@ -120,20 +133,43 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
               </SelectTrigger>
               <SelectContent className="w-[200px] bg-grey shadow-none border-2 border-[--gray-2300]">
                 <SelectGroup className="">
-                  <SelectItem value="backlog" className="pl-3 py">
-                    Backlog
+                  <SelectItem
+                    value="backlog"
+                    className="pl-3 py-2 flex flex-row gap-12"
+                  >
+                    <div className="flex-center gap-2">
+                      <TbCircleDotted />
+                      <h3>Backlog</h3>
+                    </div>
                   </SelectItem>
-                  <SelectItem value="todo" className="pl-3 py-2">
-                    Todo
+                  <SelectItem value="todo" className="pl-3 py-2 flex gap-2">
+                    <div className="flex-center gap-2">
+                      <FaRegCircle /> Todo
+                    </div>
                   </SelectItem>
-                  <SelectItem value="progress" className="pl-3 py-2">
-                    In Progress
+                  <SelectItem value="progress" className="pl-3 py-2 flex gap-2">
+                    <div className="flex-center gap-2">
+                      <span className="text-yellow-400">
+                        <PiCircleHalfFill />
+                      </span>{" "}
+                      <p>In Progress</p>
+                    </div>
                   </SelectItem>
-                  <SelectItem value="review" className="pl-3 py-2">
-                    In review
+                  <SelectItem value="review" className="pl-3 py-2 flex gap-2">
+                    <div className="flex-center gap-2">
+                      <span className="text-green-600">
+                        <BiSolidCircleThreeQuarter />
+                      </span>
+                      In review
+                    </div>
                   </SelectItem>
-                  <SelectItem value="done" className="pl-3 py-2">
-                    Done
+                  <SelectItem value="done" className="pl-3 py-2 flex gap-2">
+                    <div className="flex-center gap-2">
+                      <span className="text-blue-700">
+                        <FaCheckCircle />
+                      </span>{" "}
+                      Done
+                    </div>
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>
@@ -145,19 +181,41 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
               <SelectContent className="w-[200px] bg-grey shadow-none border-2 border-[--gray-2300]">
                 <SelectGroup className="flex flex-col justify-start items-start">
                   <SelectItem value="no priority" className="pl-3 py-2">
-                    No Priority
+                    <div className="flex-center gap-2">
+                      <span>---</span> No priority
+                    </div>
                   </SelectItem>
                   <SelectItem value="urgent" className="pl-3 py-2">
-                    Urgent
+                    <div className="flex-center gap-2">
+                      <span>
+                        <BiSolidMessageSquareError />
+                      </span>{" "}
+                      Urgent
+                    </div>
                   </SelectItem>
                   <SelectItem value="high" className="pl-3 py-2">
-                    High
+                    <div className="flex-center gap-2">
+                      <span>
+                        <LiaSignalSolid />
+                      </span>{" "}
+                      High
+                    </div>
                   </SelectItem>
                   <SelectItem value="medium" className="pl-3 py-2">
-                    Medium
+                    <div className="flex-center gap-2">
+                      <span>
+                        <MdOutlineSignalCellularAlt2Bar />
+                      </span>{" "}
+                      Medium
+                    </div>
                   </SelectItem>
                   <SelectItem value="low" className="pl-3 py-2">
-                    Low
+                    <div className="flex-center gap-2">
+                      <span>
+                        <MdSignalCellularAlt1Bar />
+                      </span>{" "}
+                      Low
+                    </div>
                   </SelectItem>
                 </SelectGroup>
               </SelectContent>

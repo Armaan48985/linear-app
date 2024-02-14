@@ -91,7 +91,6 @@ const page = () => {
     };
   }, []);
 
-  console.log(horizontal);
 
   const [rightSidebarOpen, setRightSidebarOpen] = useState(() => {
     if (typeof window !== "undefined") {

@@ -38,9 +38,7 @@ export const DropArea = ({ issue, title }: any) => {
       {issues.length > 0 && (
         <div>
           <header
-            className={`w-full h-11 flex-between px-6 ${
-              horizontal ? "bg-body w-[450px]" : "bg-darkgrey"
-            }`}
+            className={`w-full h-11 flex-between px-6`}
           >
             <p>{title}</p>
             <CreateIssue trigger={<GoPlus />} createIssue={addIssuetoDone} />

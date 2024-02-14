@@ -6,7 +6,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import "@/app/globals.css";
-import { FaDotCircle, FaRegCalendar, FaRegStar } from "react-icons/fa";
+import { FaCheckCircle, FaDotCircle, FaRegCalendar, FaRegCircle, FaRegStar } from "react-icons/fa";
 import { FaAlignJustify } from "react-icons/fa6";
 import { LuAlignVerticalJustifyCenter } from "react-icons/lu";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,9 @@ import { BsThreeDots } from "react-icons/bs";
 import PriorityCheck from "@/components/PriorityCheck";
 import { FaUser } from "react-icons/fa";
 import RightSidebar from "@/components/RightSidebar";
+import { BiSolidCircleThreeQuarter } from "react-icons/bi";
+import { PiCircleHalfFill } from "react-icons/pi";
+import { TbCircleDotted } from "react-icons/tb";
 
 const page = () => {
   const months: string[] = [
@@ -61,7 +64,7 @@ const page = () => {
   );
 
   const { fetchDataAndInitializeState } = fetchIssues();
-  const [horizontal, setHorizontal] = useState(true);
+  const [horizontal, setHorizontal] = useState(false);
 
   useEffect(() => {
     const storedInitialized = localStorage.getItem("initialized"); // Check local storage
@@ -234,6 +237,9 @@ const page = () => {
                           >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
+                              <span className="text-green-600">
+                                <BiSolidCircleThreeQuarter />
+                              </span>
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
@@ -321,6 +327,9 @@ const page = () => {
                           >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
+                              <span className="text-yellow-400">
+                                <PiCircleHalfFill />
+                              </span>
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
@@ -403,6 +412,7 @@ const page = () => {
                           >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
+                              <FaRegCircle />
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
@@ -485,6 +495,7 @@ const page = () => {
                           >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
+                              <TbCircleDotted />
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">
@@ -568,6 +579,9 @@ const page = () => {
                           >
                             <div className="flex-between gap-3">
                               <PriorityCheck priority={e.priority} />
+                              <span className="text-blue-700">
+                                <FaCheckCircle />
+                              </span>
                               <p key={i}>{e.name}</p>
                             </div>
                             <div className="flex-center gap-3 text-[--low-opacity-txt]">

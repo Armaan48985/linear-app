@@ -50,6 +50,7 @@ import {
 } from "react-icons/bi";
 import { FaCheckCircle } from "react-icons/fa";
 import { LiaSignalSolid } from "react-icons/lia";
+import PriorityDropDown from "./dropdowns/PriorityDropDown";
 
 const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   const [issueTitle, setIssueTitle] = useState("");
@@ -73,7 +74,6 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
   };
 
   const handleSelectPriority = (e: string) => {
-    console.log(e);
     setPriority(e);
   };
   const handleSelectLabel = (e: string) => {
@@ -125,7 +125,7 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
 
           <div className="flex item-center gap-2">
             <Select onValueChange={handleSelectType}>
-              <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm group">
+              <SelectTrigger className="w-[100px] border-none outline-none bg-[#3e3b48] text-gray-200 h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm group">
                 <SelectValue
                   placeholder={value || "backlog"}
                   className="text-red-900 group-hover:placeholder:opacity-100"
@@ -174,59 +174,17 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Select onValueChange={handleSelectPriority}>
-              <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
-                <SelectValue placeholder="Priority" />
-              </SelectTrigger>
-              <SelectContent className="w-[200px] bg-grey shadow-none border-2 border-[--gray-2300]">
-                <SelectGroup className="flex flex-col justify-start items-start">
-                  <SelectItem value="no priority" className="pl-3 py-2">
-                    <div className="flex-center gap-2">
-                      <span>---</span> No priority
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="urgent" className="pl-3 py-2">
-                    <div className="flex-center gap-2">
-                      <span>
-                        <BiSolidMessageSquareError />
-                      </span>{" "}
-                      Urgent
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="high" className="pl-3 py-2">
-                    <div className="flex-center gap-2">
-                      <span>
-                        <LiaSignalSolid />
-                      </span>{" "}
-                      High
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="medium" className="pl-3 py-2">
-                    <div className="flex-center gap-2">
-                      <span>
-                        <MdOutlineSignalCellularAlt2Bar />
-                      </span>{" "}
-                      Medium
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="low" className="pl-3 py-2">
-                    <div className="flex-center gap-2">
-                      <span>
-                        <MdSignalCellularAlt1Bar />
-                      </span>{" "}
-                      Low
-                    </div>
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <PriorityDropDown
+              handleSelectPriority={handleSelectPriority}
+              trigger="priority"
+            />
             <Select>
-              <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
+              <SelectTrigger className="w-[100px] border-none outline-none bg-[#3e3b48] text-gray-200 h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm group">
                 <SelectValue placeholder="Assignee" />
               </SelectTrigger>
             </Select>
             <Select onValueChange={handleSelectLabel}>
-              <SelectTrigger className="w-auto border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
+              <SelectTrigger className="w-auto border-none outline-none bg-[#3e3b48] text-gray-200  h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
                 <span className="px-3 text-gray-300 text-lg">
                   {" "}
                   <MdLabel />
@@ -286,7 +244,7 @@ const CreateIssue = ({ trigger, createIssue, issueType }: any) => {
               </SelectContent>
             </Select>
             <Select>
-              <SelectTrigger className="w-[100px] border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm">
+              <SelectTrigger className="w-[100px] border-none outline-none bg-[#3e3b48] text-gray-200 h-7 mt-2 flex-center px-0 mx-0 gap-2 rounded-smm group">
                 <SelectValue placeholder="project" />
               </SelectTrigger>
             </Select>

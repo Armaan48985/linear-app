@@ -34,7 +34,7 @@ const DueDateDropdown = ({date, setDate, trigger}:any) => {
       <DropdownMenuTrigger>
         <Button
           variant="default"
-          className="w-auto border-none outline-none bg-[--gray-2400] h-7 mt-2 flex-center px-3 mx-0 gap-2 rounded-smm"
+          className="w-auto border-none outline-none bg-[#3e3b48] text-gray-200  h-7 mt-2 flex-center px-3 mx-0 gap-2 rounded-smm"
         >
          {trigger}
         </Button>
